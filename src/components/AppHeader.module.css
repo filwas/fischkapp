@@ -1,4 +1,30 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;500&family=Lexend:wght@400;500;600&display=swap");
+
 .header {
   height: 60px;
   background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  margin-left: 16px;
+}
+
+.textWrap {
+  flex-grow: 1;
+}
+
+.text {
+  margin-left: 12px;
+  font-family: Lexend;
+  font-size: 18px;
+  line-height: 21px;
+}
+
+.button {
+  margin-right: 16px;
+  background: none;
+  border: none;
 }
