@@ -3,11 +3,13 @@ import { AppLayout } from "./components/AppLayout";
 import logo from "../public/FischLogo.svg"
 
 import "./App.css";
+import { Card } from "./components/Card";
 
 function App() {
   return (
     <AppLayout>
-      <AppHeader cardsAmount={4} logoURL={logo}/>
+      <AppHeader cardAmount={4} logoURL={logo}/>
+      <Card></Card>
     </AppLayout>
   );
 }

@@ -1,0 +1,39 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;500&family=Lexend:wght@400;500;600&display=swap");
+
+.card {
+  background-color: white;
+  min-height: 188px;
+  min-width: 343px;
+  margin: 15px;
+  border: 1px solid rgba(235, 235, 236, 1);
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.basicText {
+  font: Lexend;
+}
+
+.input {
+  width: 90%;
+  font-size: 16px;
+  line-height: 19px;
+}
+
+.button {
+  font-size: 14px;
+  line-height: 18px;
+}
+
+.caption {
+  font: Lexend;
+  font-size: 12px;
+}
+
+.body {
+  font-size: 16px;
+  line-height: 18px;
+}
