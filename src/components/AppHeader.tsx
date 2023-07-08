@@ -1,23 +1,21 @@
+import React from "react";
 import styles from "./AppHeader.module.css";
-import FischLogo from "../../public/fischLogo";
-import AddNewButton from "../../public/addNewButton";
-
+import { NewCardButton } from "./AddNewCardButton";
 interface HeaderProps {
-  cardsAmt: Number;
+  cardsAmount: Number;
+  logoURL: string;
 }
 
-export const AppHeader = (props: HeaderProps) => (
-  <header className={styles.header}>
-    <div className={styles.logo}>
-      <FischLogo />
-    </div>
-    <div className={styles.textWrap}>
-      <span className={styles.text}>
-        Cards amount: {props.cardsAmt.toString()}
-      </span>
-    </div>
-    <button className={styles.button}>
-      <AddNewButton />
-    </button>
-  </header>
-);
+export const AppHeader = (props: HeaderProps) => {
+  return (
+    <header className={styles.header}>
+      <img className={styles.logo} src={props.logoURL} alt="FischkApp logo" />
+      <div className={styles.textWrap}>
+        <span className={styles.text}>
+          Cards amount: <>{props.cardsAmount}</>
+        </span>
+      </div>
+      <div className={styles.buttonWrap}><NewCardButton onClick={()=>{}} /></div>
+    </header>
+  );
+};

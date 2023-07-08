@@ -23,8 +23,6 @@
   line-height: 21px;
 }
 
-.button {
+.buttonWrap {
   margin-right: 16px;
-  background: none;
-  border: none;
 }
