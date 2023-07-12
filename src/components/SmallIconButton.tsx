@@ -5,7 +5,7 @@ import deleteIcon from "../../public/deleteIcon.svg";
 
 interface ButtonProps {
   type: "edit" | "delete";
-  onClick(): void;
+  onClick: (event: React.MouseEvent) => void;
 }
 export const SmallIconButton = (props: ButtonProps) => {
     const imageSource = props.type == "edit" ? editIcon : deleteIcon;

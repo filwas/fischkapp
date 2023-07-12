@@ -12,7 +12,7 @@ import styles from "./TextInput.module.css";
 
 interface TextProps extends PropsWithChildren {
   disabled?: boolean;
-  onChange?: ChangeEventHandler;
+  onChange?: (event: React.ChangeEvent) => void;
   value?: string;
   ref?: any;
 }

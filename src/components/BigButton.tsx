@@ -4,7 +4,7 @@ import styles from "./BigButton.module.css";
 interface BigButtonProps extends PropsWithChildren {
     /**Toggle ON returns a black button, OFF returns a white one. */
   colorToggle: boolean;
-  onClick(): void;
+  onClick: (event: React.MouseEvent) => void;
 }
 export const BigButton = (props: BigButtonProps) => {
   const dynamicClasses = [

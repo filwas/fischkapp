@@ -14,10 +14,10 @@ interface CardProps {
 
 export const Card = (props: CardProps) => {
   // text on side A
-  const [faceValue, setFaceValue] = useState("kakasraka");
+  const [faceValue, setFaceValue] = useState("");
   const [tempFaceValue, setTempFaceValue] = useState(faceValue);
   // text on side B
-  const [flipValue, setFlipValue] = useState("dupabiskupa");
+  const [flipValue, setFlipValue] = useState("");
 
   //wether we're editing the card
   const [editEnabled, setEditEnabled] = useState(false);
@@ -34,7 +34,7 @@ export const Card = (props: CardProps) => {
     setFlipState(!flipState);
   }
 
-  function editHandler(event?: Event) {
+  function editHandler(event?: React.MouseEvent) {
     setEditEnabled(!editEnabled);
     setInputDisplayValue(flipState ? tempFaceValue : flipValue);
     event && event.stopPropagation();
@@ -49,22 +49,22 @@ export const Card = (props: CardProps) => {
     tapHandler();
     setInputDisplayValue(flipValue);
   };
-  const saveClick = (event: Event) => {
+  const saveClick = (event: React.MouseEvent) => {
     setFaceValue(tempFaceValue);
     setFlipValue(inputDisplayValue);
     editHandler();
     event.stopPropagation();
   };
-  const backClick = (event: Event) => {
+  const backClick = (event: React.MouseEvent) => {
     tapHandler();
     setInputDisplayValue(tempFaceValue);
     event.stopPropagation();
   };
-  const deleteClick = (event: Event) => {
+  const deleteClick = (event: React.MouseEvent) => {
     event.stopPropagation();
   };
 
-  const textInputOnChange = function (event: Event) {
+  const textInputOnChange = function (event: React.ChangeEvent) {
     const target = event.target as HTMLTextAreaElement;
     setInputDisplayValue(target.value)
     target.style.height = "19px";
