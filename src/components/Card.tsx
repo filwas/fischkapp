@@ -1,4 +1,4 @@
-import React, { SyntheticEvent, useRef, useState } from "react";
+import React, { useState } from "react";
 import styles from "./Card.module.css";
 import { TextInput } from "./TextInput";
 import { SmallIconButton } from "./SmallIconButton";
@@ -10,6 +10,8 @@ interface CardProps {
   faceValue?: string;
   /**text on side B */
   flipValue?: string;
+  onDelete: ()=>void;
+  key: number
 }
 
 export const Card = (props: CardProps) => {
@@ -61,6 +63,7 @@ export const Card = (props: CardProps) => {
     event.stopPropagation();
   };
   const deleteClick = (event: React.MouseEvent) => {
+    props.onDelete();
     event.stopPropagation();
   };
 
@@ -73,7 +76,7 @@ export const Card = (props: CardProps) => {
 
   if (editEnabled) {
     return (
-      <div className={styles.card} onClick={() => {}}>
+      <div className={styles.card} onClick={() => {}} key={props.key}>
         <SmallIconButton
           type={editEnabled ? "delete" : "edit"}
           onClick={editEnabled ? deleteClick : editHandler}
