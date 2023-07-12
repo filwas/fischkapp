@@ -1,26 +1,36 @@
-import React, { SyntheticEvent, useEffect } from "react";
+import React, {
+  ChangeEventHandler,
+  MutableRefObject,
+  PropsWithChildren,
+  RefObject,
+  SyntheticEvent,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import styles from "./TextInput.module.css";
 
-interface TextProps {
-  textValue: string;
+interface TextProps extends PropsWithChildren {
   disabled?: boolean;
+  onChange?: ChangeEventHandler;
+  value?: string;
+  ref?: any;
 }
 
+
+
 export const TextInput = (props: TextProps) => {
-    
-  const heightFixer = function (event: SyntheticEvent) {
-    const target = event.target as HTMLTextAreaElement;
-    target.style.height = "19px";
-    target.style.height = `${target.scrollHeight}px`;
-  };
+
+  const inputRef = useRef();
+
 
   return (
     <textarea
       className={styles.input}
-      onChange={heightFixer}
+      onChange={props.onChange}
       disabled={props.disabled}
+      value={props.value}
     >
-      {props.textValue}
     </textarea>
   );
 };

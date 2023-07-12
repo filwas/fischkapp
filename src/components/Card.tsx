@@ -1,32 +1,110 @@
-import React, { useState } from "react";
+import React, { SyntheticEvent, useRef, useState } from "react";
 import styles from "./Card.module.css";
 import { TextInput } from "./TextInput";
 import { SmallIconButton } from "./SmallIconButton";
+import { TextOutput } from "./TextOutput";
+import { BigButton } from "./BigButton";
 
 interface CardProps {
-    faceValue?: string;
-    flipValue?: string;
+  /**text on side A */
+  faceValue?: string;
+  /**text on side B */
+  flipValue?: string;
 }
 
 export const Card = (props: CardProps) => {
+  // text on side A
+  const [faceValue, setFaceValue] = useState("kakasraka");
+  const [tempFaceValue, setTempFaceValue] = useState(faceValue);
+  // text on side B
+  const [flipValue, setFlipValue] = useState("dupabiskupa");
 
-    const [faceValue, setFaceValue] = useState("")
-    const [flipValue, setFlipValue] = useState("")
-    const [editEnabled, setEditEnabled] = useState(false)
-    const [flipState, setFlipState] = useState(false)
+  //wether we're editing the card
+  const [editEnabled, setEditEnabled] = useState(false);
 
-    function tapHandler(){
-        setEditEnabled(!editEnabled)
-    }
+  //flipState on = side A displayed, flipState off = side B
+  const [flipState, setFlipState] = useState(true);
 
-    function editHandler(){
-
-    }
-  return (
-    <div className={styles.card} onClick={tapHandler}>
-      <SmallIconButton type={editEnabled ? "delete" : "edit"} onClick={()=>{}}/>
-      <TextInput textValue={faceValue}/>
-      <SmallIconButton type="edit" onClick={()=>{}}/>
-    </div>
+  //state used for controlling the default display of input
+  const [inputDisplayValue, setInputDisplayValue] = useState(
+    flipState ? faceValue : flipValue
   );
+
+  function tapHandler() {
+    setFlipState(!flipState);
+  }
+
+  function editHandler(event?: Event) {
+    setEditEnabled(!editEnabled);
+    setInputDisplayValue(flipState ? tempFaceValue : flipValue);
+    event && event.stopPropagation();
+  }
+
+  const cancelClick = () => {
+    editHandler();
+  };
+
+  const nextClick = () => {
+    setTempFaceValue(inputDisplayValue)
+    tapHandler();
+    setInputDisplayValue(flipValue);
+  };
+  const saveClick = (event: Event) => {
+    setFaceValue(tempFaceValue);
+    setFlipValue(inputDisplayValue);
+    editHandler();
+    event.stopPropagation();
+  };
+  const backClick = (event: Event) => {
+    tapHandler();
+    setInputDisplayValue(tempFaceValue);
+    event.stopPropagation();
+  };
+  const deleteClick = (event: Event) => {
+    event.stopPropagation();
+  };
+
+  const textInputOnChange = function (event: Event) {
+    const target = event.target as HTMLTextAreaElement;
+    setInputDisplayValue(target.value)
+    target.style.height = "19px";
+    target.style.height = `${target.scrollHeight}px`;
+  };
+
+  if (editEnabled) {
+    return (
+      <div className={styles.card} onClick={() => {}}>
+        <SmallIconButton
+          type={editEnabled ? "delete" : "edit"}
+          onClick={editEnabled ? deleteClick : editHandler}
+        />
+        {!flipState && <TextOutput className={styles.caption}>{tempFaceValue}</TextOutput>}
+        <TextInput value={inputDisplayValue} onChange={textInputOnChange} />
+        <div className={styles.buttonWrapper}>
+          <BigButton
+            colorToggle={false}
+            onClick={flipState ? cancelClick : backClick}
+          >
+            {flipState ? "Cancel" : "Back"}
+          </BigButton>
+          <BigButton
+            colorToggle={true}
+            onClick={flipState ? nextClick : saveClick}
+          >
+            {flipState ? "Next" : "Save"}
+          </BigButton>
+        </div>
+      </div>
+    );
+  } else {
+    return (
+      <div className={styles.card} onClick={tapHandler}>
+        <SmallIconButton
+          type={editEnabled ? "delete" : "edit"}
+          onClick={editHandler}
+        />
+        <TextOutput>{flipState ? faceValue : flipValue}</TextOutput>
+      </div>
+    );
+  }
 };
