@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./Card.module.css";
 import { TextInput } from "./TextInput";
 import { SmallIconButton } from "./SmallIconButton";
@@ -24,9 +24,14 @@ export const Card = (props: CardProps) => {
   const [flipState, setFlipState] = useState(true);
 
   //state used for controlling the default display of input
+  //and effect for making sure it properly displays
   const [inputDisplayValue, setInputDisplayValue] = useState(
     flipState ? faceValue : flipValue
   );
+  useEffect(() => {
+    setInputDisplayValue(flipState ? tempFaceValue : flipValue);
+  }, [flipState, faceValue, flipValue, tempFaceValue]);
+
 
   function tapHandler() {
     setFlipState(!flipState);
@@ -34,7 +39,6 @@ export const Card = (props: CardProps) => {
 
   function editHandler(event?: React.MouseEvent) {
     setEditEnabled(!editEnabled);
-    setInputDisplayValue(flipState ? tempFaceValue : flipValue);
     event && event.stopPropagation();
   }
 
@@ -45,7 +49,6 @@ export const Card = (props: CardProps) => {
   const nextClick = () => {
     setTempFaceValue(inputDisplayValue)
     tapHandler();
-    setInputDisplayValue(flipValue);
   };
   const saveClick = (event: React.MouseEvent) => {
     setFaceValue(tempFaceValue);
@@ -55,7 +58,6 @@ export const Card = (props: CardProps) => {
   };
   const backClick = (event: React.MouseEvent) => {
     tapHandler();
-    setInputDisplayValue(tempFaceValue);
     event.stopPropagation();
   };
   const deleteClick = (event: React.MouseEvent) => {
