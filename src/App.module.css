@@ -1,0 +1,27 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #373737;
+}
+
+.renderContainer{
+  max-height: 695px;
+  overflow: auto;
+  scrollbar-width: thin; /* For Firefox */
+  scrollbar-color: transparent transparent; /* For Firefox */
+}
+
+.renderContainer::-webkit-scrollbar {
+  /* Hide the scrollbar for WebKit-based browsers */
+  width: 0.5em;
+  background-color: transparent;
+}
+
+.renderContainer::-webkit-scrollbar-thumb {
+  /* Style the thumb (drag handle) */
+  background-color: transparent;
+}

@@ -4,6 +4,7 @@ import { NewCardButton } from "./AddNewCardButton";
 interface HeaderProps {
   cardAmount: Number;
   logoURL: string;
+  onClick: ()=>void;
 }
 
 export const AppHeader = (props: HeaderProps) => {
@@ -15,7 +16,7 @@ export const AppHeader = (props: HeaderProps) => {
           Cards: <>{props.cardAmount}</>
         </span>
       </div>
-      <div className={styles.buttonWrap}><NewCardButton onClick={()=>{}} /></div>
+      <div className={styles.buttonWrap}><NewCardButton onClick={props.onClick} /></div>
     </header>
   );
 };
