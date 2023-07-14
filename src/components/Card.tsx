@@ -6,19 +6,26 @@ import { TextOutput } from "./TextOutput";
 import { BigButton } from "./BigButton";
 
 interface CardProps {
+  /**side A of the card*/
+  faceValue?: string;
+  /**side B of the card*/
+  flipValue?: string;
   cardsAmount: number;
   setCardsAmount: Dispatch<SetStateAction<number>>;
 }
 
 export const Card = (props: CardProps) => {
   // text on side A
-  const [faceValue, setFaceValue] = useState("");
-  const [tempFaceValue, setTempFaceValue] = useState(faceValue);
+  const [faceValue, setFaceValue] = useState(
+    props.faceValue ? props.faceValue : ""
+  );
   // text on side B
-  const [flipValue, setFlipValue] = useState("");
+  const [flipValue, setFlipValue] = useState(
+    props.flipValue ? props.flipValue : ""
+  );
 
   //wether we're editing the card
-  const [editEnabled, setEditEnabled] = useState(true);
+  const [editEnabled, setEditEnabled] = useState(false);
 
   //flipState on = side A displayed, flipState off = side B
   const [flipState, setFlipState] = useState(true);
@@ -30,8 +37,11 @@ export const Card = (props: CardProps) => {
   );
 
   useEffect(() => {
-    setInputDisplayValue(flipState ? tempFaceValue : flipValue);
-  }, [flipState, faceValue, flipValue, tempFaceValue]);
+    setInputDisplayValue(flipState ? faceValue : flipValue);
+  }, [flipState, faceValue, flipValue]);
+
+  //state used for changing the height of the text display
+  const [textOutputHeight, setTextOutputHeight] = useState(19);
 
   //state and custom event for handling card removal
   const [removeStatus, setRemoveStatus] = useState(false);
@@ -46,25 +56,16 @@ export const Card = (props: CardProps) => {
   }
 
   const handleCancelButtonClick = () => {
-    if (faceValue === "" && flipValue === "") {
-      handleDeleteButtonClick();
-    } else {
-      handleEditButtonClick();
-    }
+    handleEditButtonClick();
   };
 
-  const handleNextButtonClick = () => {
-    setTempFaceValue(inputDisplayValue);
-    handleTap();
-  };
   const handleSaveButtonClick = (event?: React.MouseEvent) => {
-    setFaceValue(tempFaceValue);
-    setFlipValue(inputDisplayValue);
+    if (flipState) {
+      setFaceValue(inputDisplayValue);
+    } else {
+      setFlipValue(inputDisplayValue);
+    }
     handleEditButtonClick();
-    if (event) event.stopPropagation();
-  };
-  const handleBackButtonClick = (event?: React.MouseEvent) => {
-    handleTap();
     if (event) event.stopPropagation();
   };
 
@@ -76,9 +77,14 @@ export const Card = (props: CardProps) => {
 
   const handleTextInputOnChange = function (event: React.ChangeEvent) {
     const target = event.target as HTMLTextAreaElement;
+    const newHeight = target.scrollHeight;
     setInputDisplayValue(target.value);
-    target.style.height = "19px";
-    target.style.height = `${target.scrollHeight}px`;
+    target.style.height = `${
+      newHeight > textOutputHeight ? newHeight : textOutputHeight
+    }px`;
+    setTextOutputHeight(
+      newHeight > textOutputHeight ? newHeight : textOutputHeight
+    );
   };
 
   if (removeStatus) return null;
@@ -86,33 +92,18 @@ export const Card = (props: CardProps) => {
   if (editEnabled) {
     return (
       <div className={styles.card} onClick={() => {}}>
-        <SmallIconButton
-          type={"delete"}
-          onClick={
-            editEnabled ? handleDeleteButtonClick : handleEditButtonClick
-          }
-        />
-        {!flipState && (
-          <TextOutput className={styles.caption}>{tempFaceValue}</TextOutput>
-        )}
+        <SmallIconButton type={"delete"} onClick={handleDeleteButtonClick} />
         <TextInput
+          height={textOutputHeight}
           value={inputDisplayValue}
           onChange={handleTextInputOnChange}
         />
         <div className={styles.buttonWrapper}>
-          <BigButton
-            colorToggle={false}
-            onClick={
-              flipState ? handleCancelButtonClick : handleBackButtonClick
-            }
-          >
-            {flipState ? "Cancel" : "Back"}
+          <BigButton colorToggle={false} onClick={handleCancelButtonClick}>
+            Cancel
           </BigButton>
-          <BigButton
-            colorToggle={true}
-            onClick={flipState ? handleNextButtonClick : handleSaveButtonClick}
-          >
-            {flipState ? "Next" : "Save"}
+          <BigButton colorToggle={true} onClick={handleSaveButtonClick}>
+            Save
           </BigButton>
         </div>
       </div>
@@ -121,11 +112,13 @@ export const Card = (props: CardProps) => {
     return (
       <div className={styles.card} onClick={handleTap}>
         <SmallIconButton type={"edit"} onClick={handleEditButtonClick} />
-        <TextOutput>{flipState ? faceValue : flipValue}</TextOutput>
+        <TextOutput height={textOutputHeight}>
+          {flipState ? faceValue : flipValue}
+        </TextOutput>
         {/**this second, empty textoutput exists only so that i can simply use
          * a single "justify-content: space-between;" on it's wrapper div
          * to make it look exactly like the project requirements! :D*/}
-        <TextOutput></TextOutput>
+        <TextOutput height={19}></TextOutput>
       </div>
     );
   }

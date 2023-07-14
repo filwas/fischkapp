@@ -8,15 +8,15 @@ import { useState } from "react";
 
 function App() {
   const [cardsAmount, setCardsAmount] = useState(1)
-  const [cards, setCards] = useState([{}]);
+  const [cardsFrameArray, setcardsFrameArray] = useState([{}]);
 
   const handleAddCardButtonClick = () => {
     setCardsAmount(cardsAmount+1)
-    setCards(prevCards => [...prevCards, {}]);
+    setcardsFrameArray(prevCards => [...prevCards, {}]);
   };
   
   const renderCards = () => {
-    return cards.map(() => (
+    return cardsFrameArray.map(() => (
       <Card cardsAmount={cardsAmount} setCardsAmount={setCardsAmount} />
     ));
   };
