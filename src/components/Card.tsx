@@ -52,7 +52,7 @@ export const Card = (props: CardProps) => {
   }
 
   const handleCancelButtonClick = () => {
-    if (faceValue === "") {
+    if (faceValue === "" && flipValue === "") {
       handleDeleteButtonClick();
     } else {
       handleEditButtonClick();
