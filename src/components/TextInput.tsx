@@ -1,6 +1,4 @@
-import React, {
-  PropsWithChildren,
-} from "react";
+import React, { PropsWithChildren } from "react";
 import styles from "./TextInput.module.css";
 
 interface TextProps extends PropsWithChildren {
@@ -10,7 +8,6 @@ interface TextProps extends PropsWithChildren {
 }
 
 export const TextInput = (props: TextProps) => {
-
   return (
     <textarea
       className={styles.input}
@@ -18,7 +15,6 @@ export const TextInput = (props: TextProps) => {
       disabled={props.disabled}
       value={props.value}
       autoFocus={true}
-    >
-    </textarea>
+    ></textarea>
   );
 };

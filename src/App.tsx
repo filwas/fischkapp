@@ -4,7 +4,7 @@ import logo from "../public/FischLogo.svg";
 
 import styles from "./App.module.css";
 import { Card } from "./components/Card";
-import { useRef, useState } from "react";
+import { useState } from "react";
 
 function App() {
   const [cardsAmount, setCardsAmount] = useState(1)
@@ -15,7 +15,6 @@ function App() {
     setCards(prevCards => [...prevCards, {}]);
   };
   
-
   const renderCards = () => {
     return cards.map(() => (
       <Card cardsAmount={cardsAmount} setCardsAmount={setCardsAmount} />
