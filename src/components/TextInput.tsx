@@ -9,8 +9,6 @@ interface TextProps extends PropsWithChildren {
   value?: string;
 }
 
-
-
 export const TextInput = (props: TextProps) => {
 
   return (
@@ -19,6 +17,7 @@ export const TextInput = (props: TextProps) => {
       onChange={props.onChange}
       disabled={props.disabled}
       value={props.value}
+      autoFocus={true}
     >
     </textarea>
   );

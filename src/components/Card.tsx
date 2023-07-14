@@ -105,6 +105,9 @@ export const Card = (props: CardProps) => {
           onClick={handleEditButtonClick}
         />
         <TextOutput>{flipState ? faceValue : flipValue}</TextOutput>
+        {/**this second, empty textoutput exists only so that i can simply use 
+         * a single "justify-content: space-between;" on it's wrapper div*/}
+        <TextOutput></TextOutput>
       </div>
     );
   }
