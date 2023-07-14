@@ -9,17 +9,17 @@ import { useState } from "react";
 function App() {
   const [cards, setCards] = useState([{}]);
 
-  const handleAddCard = () => {
+  const handleAddCardButtonClick = () => {
     setCards(prevCards => [...prevCards, {}]);
   };
 
-  const handleDeleteCard = (index:number) => {
+  const handleDeleteCardButtonClick = (index:number) => {
     //to be implemented
   };
 
   const renderCards = () => {
     return cards.map((card, index) => (
-      <Card key={index} onDelete={() => handleDeleteCard(index)} />
+      <Card key={index} onDelete={() => handleDeleteCardButtonClick(index)} />
     ));
   };
 
@@ -28,7 +28,7 @@ function App() {
       <AppHeader
         cardAmount={cards.length}
         logoURL={logo}
-        onClick={handleAddCard}
+        onClick={handleAddCardButtonClick}
       />
       <div className={styles.renderContainer}>{renderCards()}</div>
     </AppLayout>
