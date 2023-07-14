@@ -6,10 +6,6 @@ import { TextOutput } from "./TextOutput";
 import { BigButton } from "./BigButton";
 
 interface CardProps {
-  /**text on side A */
-  faceValue?: string;
-  /**text on side B */
-  flipValue?: string;
   onDelete: ()=>void;
   key: number
 }
