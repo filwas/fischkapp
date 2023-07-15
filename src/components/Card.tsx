@@ -74,7 +74,7 @@ export const Card = (props: CardProps) => {
   };
 
   const handleDeleteButtonClick = (event?: React.MouseEvent) => {
-    setRemoveStatus(true)
+    setRemoveStatus(true);
   };
 
   const handleTextInputOnChange = function (event: React.ChangeEvent) {

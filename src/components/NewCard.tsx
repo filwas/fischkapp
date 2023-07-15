@@ -7,7 +7,7 @@ import { BigButton } from "./BigButton";
 import { Card } from "./Card";
 
 interface CardProps {
-    key: number
+  key: number;
 }
 
 export const NewCard = (props: CardProps) => {
@@ -32,7 +32,7 @@ export const NewCard = (props: CardProps) => {
   //state used for changing the height of the text display
   const [textOutputHeight, setTextOutputHeight] = useState(19);
 
-  const [removeStatus, setRemoveStatus] = useState(false)
+  const [removeStatus, setRemoveStatus] = useState(false);
 
   //state used for changing the NewCard element into Card element.
   const [savedStatus, setSavedStatus] = useState(false);
@@ -42,8 +42,8 @@ export const NewCard = (props: CardProps) => {
     setFlipState(!flipState);
   };
   const handleSaveButtonClick = () => {
-    setFlipValue(inputDisplayValue)
-    setSavedStatus(true)
+    setFlipValue(inputDisplayValue);
+    setSavedStatus(true);
   };
   const handleBackButtonClick = (event?: React.MouseEvent) => {
     setFlipState(!flipState);
@@ -51,7 +51,7 @@ export const NewCard = (props: CardProps) => {
   };
 
   const handleDeleteButtonClick = (event?: React.MouseEvent) => {
-    setRemoveStatus(true)
+    setRemoveStatus(true);
     if (event) event.stopPropagation();
   };
 
@@ -62,12 +62,16 @@ export const NewCard = (props: CardProps) => {
     setTextOutputHeight(target.scrollHeight);
   };
 
-  if (removeStatus) return null
+  if (removeStatus) return null;
 
   if (!savedStatus) {
     return (
       <div className={styles.card} onClick={() => {}}>
-        { flipState ? <TextOutput height={10} /> :  <SmallIconButton type={"delete"} onClick={handleDeleteButtonClick} />}
+        {flipState ? (
+          <TextOutput height={10} />
+        ) : (
+          <SmallIconButton type={"delete"} onClick={handleDeleteButtonClick} />
+        )}
         {!flipState && (
           <TextOutput height={12} className={styles.caption}>
             {faceValue}
@@ -97,7 +101,8 @@ export const NewCard = (props: CardProps) => {
       </div>
     );
   } else {
-    return (<Card
+    return (
+      <Card
         key={props.key}
         faceValue={faceValue}
         flipValue={flipValue}
