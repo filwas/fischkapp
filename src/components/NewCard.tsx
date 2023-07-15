@@ -6,7 +6,9 @@ import { TextOutput } from "./TextOutput";
 import { BigButton } from "./BigButton";
 import { Card } from "./Card";
 
-interface CardProps {}
+interface CardProps {
+    key: number
+}
 
 export const NewCard = (props: CardProps) => {
   // text on side A
@@ -96,6 +98,7 @@ export const NewCard = (props: CardProps) => {
     );
   } else {
     return (<Card
+        key={props.key}
         faceValue={faceValue}
         flipValue={flipValue}
         textHeight={textOutputHeight}

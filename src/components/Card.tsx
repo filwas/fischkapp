@@ -10,8 +10,10 @@ interface CardProps {
   faceValue?: string;
   /**side B of the card*/
   flipValue?: string;
-
+  /**text height */
   textHeight?: number;
+  /**unique number */
+  key: number;
 }
 
 export const Card = (props: CardProps) => {
@@ -77,13 +79,9 @@ export const Card = (props: CardProps) => {
 
   const handleTextInputOnChange = function (event: React.ChangeEvent) {
     const target = event.target as HTMLTextAreaElement;
-    const newHeight =
-      target.scrollHeight > textOutputHeight
-        ? target.scrollHeight
-        : textOutputHeight;
     setInputDisplayValue(target.value);
-    target.style.height = `${newHeight}px`;
-    setTextOutputHeight(newHeight);
+    target.style.height = `${target.scrollHeight}px`;
+    setTextOutputHeight(target.scrollHeight);
   };
 
   if (removeStatus) return null;
