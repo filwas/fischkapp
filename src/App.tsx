@@ -4,31 +4,38 @@ import logo from "../public/FischLogo.svg";
 
 import styles from "./App.module.css";
 import { Card } from "./components/Card";
-import { useState } from "react";
+import { JSX, JSXElementConstructor, useState } from "react";
+import { NewCard } from "./components/NewCard";
 
 function App() {
-  const [cardsAmount, setCardsAmount] = useState(1)
-  const [cardsFrameArray, setcardsFrameArray] = useState([{}]);
+
+  let cardsMemory = [{front: "FRONT", back: "BACK"}]
+
+  let basicCards: JSX.Element[] = []
+
+  cardsMemory.forEach(cardValues => {
+    basicCards.push(<Card faceValue={cardValues.front} flipValue={cardValues.back}/>)
+  })
+
+  const [cardsArray, setCardsArray] = useState(basicCards)
 
   const handleAddCardButtonClick = () => {
-    setCardsAmount(cardsAmount+1)
-    setcardsFrameArray(prevCards => [...prevCards, {}]);
+    setCardsArray([<NewCard />, ...cardsArray])
   };
+
   
-  const renderCards = () => {
-    return cardsFrameArray.map(() => (
-      <Card cardsAmount={cardsAmount} setCardsAmount={setCardsAmount} />
-    ));
-  };
+
 
   return (
     <AppLayout>
       <AppHeader
-        cardsAmount={cardsAmount}
+        cardsAmount={cardsArray.length}
         logoURL={logo}
         onClick={handleAddCardButtonClick}
       />
-      <div className={styles.renderContainer}>{renderCards()}</div>
+      <div className={styles.renderContainer}>
+        {cardsArray}
+      </div>
     </AppLayout>
   );
 }

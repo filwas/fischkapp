@@ -3,8 +3,8 @@
 .input{
     display: block;
     width: 90%;
-    height: 19px;
-    margin: inherit;
+    height: 39px;
+    padding: 10px;
     border: 1px solid rgba(235, 235, 236, 1);
     resize: none;
     overflow: hidden;

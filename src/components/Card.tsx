@@ -10,8 +10,8 @@ interface CardProps {
   faceValue?: string;
   /**side B of the card*/
   flipValue?: string;
-  cardsAmount: number;
-  setCardsAmount: Dispatch<SetStateAction<number>>;
+
+  textHeight?: number;
 }
 
 export const Card = (props: CardProps) => {
@@ -41,7 +41,9 @@ export const Card = (props: CardProps) => {
   }, [flipState, faceValue, flipValue]);
 
   //state used for changing the height of the text display
-  const [textOutputHeight, setTextOutputHeight] = useState(19);
+  const [textOutputHeight, setTextOutputHeight] = useState(
+    props.textHeight ? props.textHeight : 19
+  );
 
   //state and custom event for handling card removal
   const [removeStatus, setRemoveStatus] = useState(false);
@@ -70,21 +72,18 @@ export const Card = (props: CardProps) => {
   };
 
   const handleDeleteButtonClick = (event?: React.MouseEvent) => {
-    props.setCardsAmount(props.cardsAmount - 1);
-    setRemoveStatus(true);
-    if (event) event.stopPropagation();
+    setRemoveStatus(true)
   };
 
   const handleTextInputOnChange = function (event: React.ChangeEvent) {
     const target = event.target as HTMLTextAreaElement;
-    const newHeight = target.scrollHeight;
+    const newHeight =
+      target.scrollHeight > textOutputHeight
+        ? target.scrollHeight
+        : textOutputHeight;
     setInputDisplayValue(target.value);
-    target.style.height = `${
-      newHeight > textOutputHeight ? newHeight : textOutputHeight
-    }px`;
-    setTextOutputHeight(
-      newHeight > textOutputHeight ? newHeight : textOutputHeight
-    );
+    target.style.height = `${newHeight}px`;
+    setTextOutputHeight(newHeight);
   };
 
   if (removeStatus) return null;

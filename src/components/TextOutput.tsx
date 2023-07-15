@@ -3,7 +3,7 @@ import styles from "./TextOutput.module.css";
 
 interface TextOutputProps extends PropsWithChildren {
   className?: string;
-  height: number;
+  height?: number;
 }
 
 export const TextOutput = (props: TextOutputProps) => {
