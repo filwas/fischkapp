@@ -6,11 +6,13 @@ import { TextOutput } from "./TextOutput";
 import { BigButton } from "./BigButton";
 import { Card } from "./Card";
 
-interface CardProps {
-    key: number
+interface NewCardProps {
+  key: number;
+  id: number;
+  onDelete: (index: number) => void;
 }
 
-export const NewCard = (props: CardProps) => {
+export const NewCard = (props: NewCardProps) => {
   // text on side A
   const [faceValue, setFaceValue] = useState("");
   // text on side B
@@ -32,7 +34,7 @@ export const NewCard = (props: CardProps) => {
   //state used for changing the height of the text display
   const [textOutputHeight, setTextOutputHeight] = useState(19);
 
-  const [removeStatus, setRemoveStatus] = useState(false)
+  const [removeStatus, setRemoveStatus] = useState(false);
 
   //state used for changing the NewCard element into Card element.
   const [savedStatus, setSavedStatus] = useState(false);
@@ -42,17 +44,16 @@ export const NewCard = (props: CardProps) => {
     setFlipState(!flipState);
   };
   const handleSaveButtonClick = () => {
-    setFlipValue(inputDisplayValue)
-    setSavedStatus(true)
+    setFlipValue(inputDisplayValue);
+    setSavedStatus(true);
   };
   const handleBackButtonClick = (event?: React.MouseEvent) => {
     setFlipState(!flipState);
     if (event) event.stopPropagation();
   };
 
-  const handleDeleteButtonClick = (event?: React.MouseEvent) => {
-    setRemoveStatus(true)
-    if (event) event.stopPropagation();
+  const handleDeleteButtonClick = () => {
+    props.onDelete(props.id)
   };
 
   const handleTextInputOnChange = function (event: React.ChangeEvent) {
@@ -62,12 +63,16 @@ export const NewCard = (props: CardProps) => {
     setTextOutputHeight(target.scrollHeight);
   };
 
-  if (removeStatus) return null
+  if (removeStatus) return null;
 
   if (!savedStatus) {
     return (
       <div className={styles.card} onClick={() => {}}>
-        { flipState ? <TextOutput height={10} /> :  <SmallIconButton type={"delete"} onClick={handleDeleteButtonClick} />}
+        {flipState ? (
+          <TextOutput height={10} />
+        ) : (
+          <SmallIconButton type={"delete"} onClick={handleDeleteButtonClick} />
+        )}
         {!flipState && (
           <TextOutput height={12} className={styles.caption}>
             {faceValue}
@@ -97,8 +102,10 @@ export const NewCard = (props: CardProps) => {
       </div>
     );
   } else {
-    return (<Card
-        key={props.key}
+    return (
+      <Card
+        id={props.id}
+        onDelete={props.onDelete}
         faceValue={faceValue}
         flipValue={flipValue}
         textHeight={textOutputHeight}

@@ -4,7 +4,7 @@ import logo from "../public/FischLogo.svg";
 
 import styles from "./App.module.css";
 import { Card } from "./components/Card";
-import { JSX, useState } from "react";
+import { JSX, useEffect, useState } from "react";
 import { NewCard } from "./components/NewCard";
 
 interface AppProps {
@@ -13,20 +13,51 @@ interface AppProps {
 function App(props: AppProps) {
   let basicCards: JSX.Element[] = [];
 
-  props.basicCards && props.basicCards.forEach((cardData, cardIndex) => {
-    basicCards.push(<Card faceValue={cardData.face} flipValue={cardData.back} key={cardIndex+1} />)
+  const [cardsArray, setCardsArray] = useState(basicCards);
+  const [incrementalKey, setIncrementalKey ] = useState(props.basicCards?.length || 0)
+
+  useEffect(() => {
+    setIncrementalKey(prevKey => prevKey +1)
+  }, [cardsArray, setCardsArray])
+
+
+  const handleDeleteCard = (id:number) => {
+    setCardsArray(prevCardsArray => {
+      const updatedCards = prevCardsArray.filter(e => e.props.id !== id);
+      return updatedCards
+    })
+  };
+
+  props.basicCards &&
+  props.basicCards.forEach((cardData, currentIndex) => {
+    basicCards.push(
+      <Card
+        onDelete={handleDeleteCard}
+        faceValue={cardData.face}
+        flipValue={cardData.back}
+        key={currentIndex}
+        id={Math.random()}
+      />
+    );
   });
 
-  const [cardsArray, setCardsArray] = useState(basicCards)
-
   const handleAddCardButtonClick = () => {
-    setCardsArray([<NewCard key={cardsArray.length+1} />, ...cardsArray])
+    setCardsArray([
+      <NewCard
+        key={incrementalKey}
+        id={Math.random()}
+        onDelete={handleDeleteCard}
+      />,
+      ...cardsArray,
+    ]);
   };
+
+
 
   return (
     <AppLayout>
       <AppHeader
-        cardsAmount={basicCards.length}
+        cardsAmount={cardsArray.length}
         logoURL={logo}
         onClick={handleAddCardButtonClick}
       />

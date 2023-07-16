@@ -13,7 +13,9 @@ interface CardProps {
   /**text height */
   textHeight?: number;
   /**unique number */
-  key: number;
+  id: number;
+  /**on delete*/
+  onDelete: (index: number) => void;
 }
 
 export const Card = (props: CardProps) => {
@@ -47,9 +49,6 @@ export const Card = (props: CardProps) => {
     props.textHeight ? props.textHeight : 19
   );
 
-  //state and custom event for handling card removal
-  const [removeStatus, setRemoveStatus] = useState(false);
-
   function handleTap() {
     setFlipState(!flipState);
   }
@@ -73,8 +72,8 @@ export const Card = (props: CardProps) => {
     if (event) event.stopPropagation();
   };
 
-  const handleDeleteButtonClick = (event?: React.MouseEvent) => {
-    setRemoveStatus(true)
+  const handleDeleteButtonClick = () => {
+    props.onDelete(props.id)
   };
 
   const handleTextInputOnChange = function (event: React.ChangeEvent) {
@@ -84,7 +83,6 @@ export const Card = (props: CardProps) => {
     setTextOutputHeight(target.scrollHeight);
   };
 
-  if (removeStatus) return null;
 
   if (editEnabled) {
     return (
