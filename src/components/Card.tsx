@@ -40,6 +40,9 @@ export const Card = (props: CardProps) => {
     flipState ? faceValue : flipValue
   );
 
+  const [playAnimation, setPlayAnimation] = useState(false);
+
+
   useEffect(() => {
     setInputDisplayValue(flipState ? faceValue : flipValue);
   }, [flipState, faceValue, flipValue]);
@@ -50,7 +53,14 @@ export const Card = (props: CardProps) => {
   );
 
   function handleTap() {
-    setFlipState(!flipState);
+    setPlayAnimation(true);
+    setTimeout(() => {
+      setFlipState(!flipState);
+    }, 200);
+    setTimeout(() => {
+      setPlayAnimation(false);
+    }, 400);
+
   }
 
   function handleEditButtonClick(event?: React.MouseEvent) {
@@ -83,6 +93,11 @@ export const Card = (props: CardProps) => {
     setTextOutputHeight(target.scrollHeight);
   };
 
+  const dynamicClasses = [
+    styles.card,
+    playAnimation ? styles.flipVerticalRight : "",
+  ].join(" ")
+
 
   if (editEnabled) {
     return (
@@ -105,7 +120,7 @@ export const Card = (props: CardProps) => {
     );
   } else {
     return (
-      <div className={styles.card} onClick={handleTap}>
+      <div className={dynamicClasses} onClick={handleTap}>
         <SmallIconButton type={"edit"} onClick={handleEditButtonClick} />
         <TextOutput height={textOutputHeight}>
           {flipState ? faceValue : flipValue}
