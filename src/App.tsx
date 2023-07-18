@@ -6,50 +6,50 @@ import styles from "./App.module.css";
 import { Card } from "./components/Card";
 import { JSX, useEffect, useState } from "react";
 import { NewCard } from "./components/NewCard";
+import React from "react";
 
 interface AppProps {
-  basicCards?: { face: string; back: string }[];
+  basicCards: {
+    face: string;
+    back: string;
+  }[];
 }
+
+interface CardObject {
+  face: string;
+  back: string;
+}
+
 function App(props: AppProps) {
-  let basicCards: JSX.Element[] = [];
-
-  const [cardsArray, setCardsArray] = useState(basicCards);
-  const [incrementalKey, setIncrementalKey ] = useState(props.basicCards?.length || 0)
-
-  useEffect(() => {
-    setIncrementalKey(prevKey => prevKey +1)
-  }, [cardsArray, setCardsArray])
-
-
-  const handleDeleteCard = (id:number) => {
-    setCardsArray(prevCardsArray => {
-      const updatedCards = prevCardsArray.filter(e => e.props.id !== id);
-      return updatedCards
-    })
-  };
-
-  props.basicCards &&
-  props.basicCards.forEach((cardData, currentIndex) => {
-    basicCards.push(
-      <Card
-        onDelete={handleDeleteCard}
-        faceValue={cardData.face}
-        flipValue={cardData.back}
-        key={currentIndex}
-        id={Math.random()}
-      />
-    );
+  const importedCards = props.basicCards.map((card, index) => {
+    return { face: card.face, back: card.back, key: index };
   });
 
+  const [cardsArray, setCardsArray] = useState(importedCards);
+
+  const [incrementalKey, setIncrementalKey] = useState(cardsArray.length);
+
+  useEffect(
+    () => setIncrementalKey((prevKey) => prevKey + 1),
+    [cardsArray, setCardsArray]
+  );
+
+  const [isNewCardDisplayed, setIsNewCardDisplayed] = useState(false);
+
   const handleAddCardButtonClick = () => {
+    setIsNewCardDisplayed(true);
+  };
+
+  const handleSaveButtonClick = (props: CardObject) => {
     setCardsArray([
-      <NewCard
-        key={incrementalKey}
-        id={Math.random()}
-        onDelete={handleDeleteCard}
-      />,
+      { face: props.face, back: props.back, key: incrementalKey },
       ...cardsArray,
     ]);
+    setIsNewCardDisplayed(false);
+  };
+
+  const handleCancelButtonClick = () => {
+    setIsNewCardDisplayed(false);
   };
 
 
@@ -57,11 +57,21 @@ function App(props: AppProps) {
   return (
     <AppLayout>
       <AppHeader
-        cardsAmount={cardsArray.length}
+        cardsAmount={cardsArray.length + (isNewCardDisplayed ? 1 : 0)}
         logoURL={logo}
         onClick={handleAddCardButtonClick}
       />
-      <div className={styles.renderContainer}>{cardsArray}</div>
+      <div className={styles.renderContainer}>
+        {isNewCardDisplayed && (
+          <NewCard
+            onSave={handleSaveButtonClick}
+            onCancel={handleCancelButtonClick}
+          />
+        )}
+        {cardsArray.map((card) => (
+          <Card faceValue={card.face} flipValue={card.back} key={card.key} />
+        ))}
+      </div>
     </AppLayout>
   );
 }

@@ -4,14 +4,14 @@ import { TextInput } from "./TextInput";
 import { SmallIconButton } from "./SmallIconButton";
 import { TextOutput } from "./TextOutput";
 import { BigButton } from "./BigButton";
+import {countTextLines} from "./helperFunctions"
+
 
 interface CardProps {
   /**side A of the card*/
-  faceValue?: string;
+  faceValue: string;
   /**side B of the card*/
-  flipValue?: string;
-  /**text height */
-  textHeight?: number;
+  flipValue: string;
   /**unique number */
   id: number;
   /**on delete*/
@@ -20,14 +20,9 @@ interface CardProps {
 
 export const Card = (props: CardProps) => {
   // text on side A
-  const [faceValue, setFaceValue] = useState(
-    props.faceValue ? props.faceValue : ""
-  );
+  const [faceValue, setFaceValue] = useState(props.faceValue);
   // text on side B
-  const [flipValue, setFlipValue] = useState(
-    props.flipValue ? props.flipValue : ""
-  );
-
+  const [flipValue, setFlipValue] = useState(props.flipValue);
   //wether we're editing the card
   const [editEnabled, setEditEnabled] = useState(false);
 
@@ -44,10 +39,12 @@ export const Card = (props: CardProps) => {
     setInputDisplayValue(flipState ? faceValue : flipValue);
   }, [flipState, faceValue, flipValue]);
 
-  //state used for changing the height of the text display
-  const [textOutputHeight, setTextOutputHeight] = useState(
-    props.textHeight ? props.textHeight : 19
-  );
+  
+  const initialTextHeight = 20 + countTextLines(faceValue.length > flipValue.length ? faceValue : flipValue) * 19
+  const [maxTextHeight, setMaxTextHeight] = useState(initialTextHeight);
+
+  //state and custom event for handling card removal
+  const [removeStatus, setRemoveStatus] = useState(false);
 
   function handleTap() {
     setFlipState(!flipState);
@@ -72,24 +69,28 @@ export const Card = (props: CardProps) => {
     if (event) event.stopPropagation();
   };
 
-  const handleDeleteButtonClick = () => {
-    props.onDelete(props.id)
+  const handleDeleteButtonClick = (event?: React.MouseEvent) => {
+    setRemoveStatus(true);
   };
 
   const handleTextInputOnChange = function (event: React.ChangeEvent) {
     const target = event.target as HTMLTextAreaElement;
     setInputDisplayValue(target.value);
-    target.style.height = `${target.scrollHeight}px`;
-    setTextOutputHeight(target.scrollHeight);
+    const newHeight = target.scrollHeight > maxTextHeight ? target.scrollHeight : maxTextHeight
+    target.style.height = `${newHeight}px`;
+    setMaxTextHeight(newHeight);
   };
 
+
+
+  if (removeStatus) return null;
 
   if (editEnabled) {
     return (
       <div className={styles.card} onClick={() => {}}>
         <SmallIconButton type={"delete"} onClick={handleDeleteButtonClick} />
         <TextInput
-          height={textOutputHeight}
+          height={maxTextHeight}
           value={inputDisplayValue}
           onChange={handleTextInputOnChange}
         />
@@ -107,13 +108,13 @@ export const Card = (props: CardProps) => {
     return (
       <div className={styles.card} onClick={handleTap}>
         <SmallIconButton type={"edit"} onClick={handleEditButtonClick} />
-        <TextOutput height={textOutputHeight}>
+        <TextOutput height={maxTextHeight}>
           {flipState ? faceValue : flipValue}
         </TextOutput>
         {/**this second, empty textoutput exists only so that i can simply use
          * a single "justify-content: space-between;" on it's wrapper div
          * to make it look exactly like the project requirements! :D*/}
-        <TextOutput height={19}></TextOutput>
+        <TextOutput></TextOutput>
       </div>
     );
   }
