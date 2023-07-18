@@ -30,9 +30,9 @@
 }
 
 .caption {
-  position: absolute;
   margin-top: 28px;
   margin-left: 15px;
+  max-width: 320px;
   align-self: start;
   font-family: Lexend;
   font-weight: 400;
