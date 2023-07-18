@@ -7,32 +7,23 @@ import { Card } from "./components/Card";
 import { JSX, useEffect, useState } from "react";
 import { NewCard } from "./components/NewCard";
 
-interface AppProps {
-  basicCards: {
-    face: string;
-    back: string;
-  }[];
-}
 
 interface CardObject {
   face: string;
   back: string;
 }
 
-function App(props: AppProps) {
-  const importedCards = props.basicCards.map((card, index) => {
-    return { face: card.face, back: card.back, key: index };
-  });
+//obviously this will be gone when i'll implement fetch and stuff.
+//it was previously provided via props, no real reason, it was just
+//a proof of concept that the app will accept such array of incoming
+//cards in the future.
+const CARDSMEMORY = [
+  { face: "a", back: "b" },
+  { face: "c", back: "d" },
+];
 
-  const [cardsArray, setCardsArray] = useState(importedCards);
-
-  const [incrementalKey, setIncrementalKey] = useState(cardsArray.length);
-
-  useEffect(
-    () => setIncrementalKey((prevKey) => prevKey + 1),
-    [cardsArray, setCardsArray]
-  );
-
+function App() {
+  const [cardsArray, setCardsArray] = useState<CardObject[]>(CARDSMEMORY);
   const [isNewCardDisplayed, setIsNewCardDisplayed] = useState(false);
 
   const handleAddCardButtonClick = () => {
@@ -41,7 +32,7 @@ function App(props: AppProps) {
 
   const handleSaveButtonClick = (props: CardObject) => {
     setCardsArray([
-      { face: props.face, back: props.back, key: incrementalKey },
+      { face: props.face, back: props.back},
       ...cardsArray,
     ]);
     setIsNewCardDisplayed(false);
@@ -65,8 +56,8 @@ function App(props: AppProps) {
             onCancel={handleCancelButtonClick}
           />
         )}
-        {cardsArray.map((card) => (
-          <Card faceValue={card.face} flipValue={card.back} key={card.key} />
+        {cardsArray.map((card, index) => (
+          <Card faceValue={card.face} flipValue={card.back} key={index} />
         ))}
       </div>
     </AppLayout>
