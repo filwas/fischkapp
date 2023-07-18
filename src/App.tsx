@@ -26,7 +26,6 @@ function App(props: AppProps) {
   });
 
   const [cardsArray, setCardsArray] = useState(importedCards);
-
   const [incrementalKey, setIncrementalKey] = useState(cardsArray.length);
 
   useEffect(
@@ -52,6 +51,10 @@ function App(props: AppProps) {
     setIsNewCardDisplayed(false);
   };
 
+  const handleDeleteButtonClick = (id: number) => {
+    const newCardsArray = cardsArray.filter(card => card.key != id)
+    setCardsArray(newCardsArray)
+  }
 
 
   return (
@@ -69,7 +72,7 @@ function App(props: AppProps) {
           />
         )}
         {cardsArray.map((card) => (
-          <Card faceValue={card.face} flipValue={card.back} key={card.key} />
+          <Card faceValue={card.face} flipValue={card.back} key={card.key} id={card.key} onDelete={handleDeleteButtonClick} />
         ))}
       </div>
     </AppLayout>

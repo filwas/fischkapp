@@ -13,6 +13,7 @@ interface CardProps {
   /**side B of the card*/
   flipValue: string;
   /**unique number */
+  key: number;
   id: number;
   /**on delete*/
   onDelete: (index: number) => void;
@@ -43,8 +44,6 @@ export const Card = (props: CardProps) => {
   const initialTextHeight = 20 + countTextLines(faceValue.length > flipValue.length ? faceValue : flipValue) * 19
   const [maxTextHeight, setMaxTextHeight] = useState(initialTextHeight);
 
-  //state and custom event for handling card removal
-  const [removeStatus, setRemoveStatus] = useState(false);
 
   function handleTap() {
     setFlipState(!flipState);
@@ -69,8 +68,8 @@ export const Card = (props: CardProps) => {
     if (event) event.stopPropagation();
   };
 
-  const handleDeleteButtonClick = (event?: React.MouseEvent) => {
-    setRemoveStatus(true);
+  const handleDeleteButtonClick = () => {
+    props.onDelete(props.id)
   };
 
   const handleTextInputOnChange = function (event: React.ChangeEvent) {
@@ -81,9 +80,6 @@ export const Card = (props: CardProps) => {
     setMaxTextHeight(newHeight);
   };
 
-
-
-  if (removeStatus) return null;
 
   if (editEnabled) {
     return (
