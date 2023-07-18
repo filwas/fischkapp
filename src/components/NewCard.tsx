@@ -6,11 +6,17 @@ import { TextOutput } from "./TextOutput";
 import { BigButton } from "./BigButton";
 import { Card } from "./Card";
 
-interface CardProps {
-  key: number;
+interface CardObject {
+  face: string;
+  back: string;
 }
 
-export const NewCard = (props: CardProps) => {
+interface NewCardProps {
+  onSave: (props: CardObject)=>void
+  onCancel: ()=>void
+}
+
+export const NewCard = (props: NewCardProps) => {
   // text on side A
   const [faceValue, setFaceValue] = useState("");
   // text on side B
@@ -32,18 +38,15 @@ export const NewCard = (props: CardProps) => {
   //state used for changing the height of the text display
   const [textOutputHeight, setTextOutputHeight] = useState(19);
 
-  const [removeStatus, setRemoveStatus] = useState(false);
 
-  //state used for changing the NewCard element into Card element.
-  const [savedStatus, setSavedStatus] = useState(false);
 
   const handleNextButtonClick = () => {
     setFaceValue(inputDisplayValue);
     setFlipState(!flipState);
   };
   const handleSaveButtonClick = () => {
-    setFlipValue(inputDisplayValue);
-    setSavedStatus(true);
+    props.onSave({face: faceValue, back: inputDisplayValue})
+    setFlipValue(inputDisplayValue)
   };
   const handleBackButtonClick = (event?: React.MouseEvent) => {
     setFlipState(!flipState);
@@ -51,7 +54,7 @@ export const NewCard = (props: CardProps) => {
   };
 
   const handleDeleteButtonClick = (event?: React.MouseEvent) => {
-    setRemoveStatus(true);
+    props.onCancel()
     if (event) event.stopPropagation();
   };
 
@@ -62,9 +65,6 @@ export const NewCard = (props: CardProps) => {
     setTextOutputHeight(target.scrollHeight);
   };
 
-  if (removeStatus) return null;
-
-  if (!savedStatus) {
     return (
       <div className={styles.card} onClick={() => {}}>
         {flipState ? (
@@ -100,14 +100,5 @@ export const NewCard = (props: CardProps) => {
         </div>
       </div>
     );
-  } else {
-    return (
-      <Card
-        key={props.key}
-        faceValue={faceValue}
-        flipValue={flipValue}
-        textHeight={textOutputHeight}
-      />
-    );
-  }
+  
 };

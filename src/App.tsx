@@ -4,41 +4,72 @@ import logo from "../public/FischLogo.svg";
 
 import styles from "./App.module.css";
 import { Card } from "./components/Card";
-import { JSX, useState } from "react";
+import { JSX, useEffect, useState } from "react";
 import { NewCard } from "./components/NewCard";
 import React from "react";
 
 interface AppProps {
-  basicCards?: { face: string; back: string }[];
+  basicCards: {
+    face: string;
+    back: string;
+  }[];
 }
-function App(props: AppProps) {
-  let basicCards: JSX.Element[] = [];
 
-  const [cardsArray, setCardsArray] = useState(basicCards);
+interface CardObject {
+  face: string;
+  back: string;
+}
+
+function App(props: AppProps) {
+  const importedCards = props.basicCards.map((card, index) => {
+    return { face: card.face, back: card.back, key: index };
+  });
+
+  const [cardsArray, setCardsArray] = useState(importedCards);
+
+  const [incrementalKey, setIncrementalKey] = useState(cardsArray.length);
+
+  useEffect(
+    () => setIncrementalKey((prevKey) => prevKey + 1),
+    [cardsArray, setCardsArray]
+  );
+
+  const [isNewCardDisplayed, setIsNewCardDisplayed] = useState(false);
 
   const handleAddCardButtonClick = () => {
-    setCardsArray([<NewCard key={cardsArray.length + 1} />, ...cardsArray]);
+    setIsNewCardDisplayed(true);
   };
 
-  props.basicCards &&
-    props.basicCards.forEach((cardData, cardIndex) => {
-      basicCards.push(
-        <Card
-          faceValue={cardData.face}
-          flipValue={cardData.back}
-          key={cardIndex + 1}
-        />
-      );
-    });
+  const handleSaveButtonClick = (props: CardObject) => {
+    setCardsArray([
+      { face: props.face, back: props.back, key: incrementalKey },
+      ...cardsArray,
+    ]);
+    setIsNewCardDisplayed(false);
+  };
+
+  const handleCancelButtonClick = () => {
+    setIsNewCardDisplayed(false);
+  };
 
   return (
     <AppLayout>
       <AppHeader
-        cardsAmount={cardsArray.length}
+        cardsAmount={cardsArray.length + (isNewCardDisplayed ? 1 : 0)}
         logoURL={logo}
         onClick={handleAddCardButtonClick}
       />
-      <div className={styles.renderContainer}>{cardsArray}</div>
+      <div className={styles.renderContainer}>
+        {isNewCardDisplayed && (
+          <NewCard
+            onSave={handleSaveButtonClick}
+            onCancel={handleCancelButtonClick}
+          />
+        )}
+        {cardsArray.map((card) => (
+          <Card faceValue={card.face} flipValue={card.back} key={card.key} />
+        ))}
+      </div>
     </AppLayout>
   );
 }
