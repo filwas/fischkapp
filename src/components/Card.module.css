@@ -31,6 +31,8 @@
 }
 
 .caption {
+  position: absolute;
+  margin-top: 28px;
   margin-left: 15px;
   align-self: start;
   font-family: Lexend;

@@ -1,14 +1,13 @@
-import React, { MutableRefObject, useRef, useState } from "react";
+import React from "react";
 import styles from "./AppHeader.module.css";
 import { NewCardButton } from "./AddNewCardButton";
 interface HeaderProps {
   cardsAmount: number;
   logoURL: string;
-  onClick: ()=>void;
+  onClick: () => void;
 }
 
 export const AppHeader = (props: HeaderProps) => {
-
   return (
     <header className={styles.header}>
       <img className={styles.logo} src={props.logoURL} alt="FischkApp logo" />
@@ -17,7 +16,9 @@ export const AppHeader = (props: HeaderProps) => {
           Cards: <>{props.cardsAmount}</>
         </span>
       </div>
-      <div className={styles.buttonWrap}><NewCardButton onClick={props.onClick} /></div>
+      <div className={styles.buttonWrap}>
+        <NewCardButton onClick={props.onClick} />
+      </div>
     </header>
   );
 };

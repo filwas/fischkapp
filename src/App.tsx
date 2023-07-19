@@ -4,32 +4,62 @@ import logo from "../public/FischLogo.svg";
 
 import styles from "./App.module.css";
 import { Card } from "./components/Card";
-import { useRef, useState } from "react";
+import { JSX, useEffect, useState } from "react";
+import { NewCard } from "./components/NewCard";
+
+
+interface CardObject {
+  face: string;
+  back: string;
+}
+
+//obviously this will be gone when i'll implement fetch and stuff.
+//it was previously provided via props, no real reason, it was just
+//a proof of concept that the app will accept such array of incoming
+//cards in the future.
+const CARDSMEMORY = [
+  { face: "a", back: "b" },
+  { face: "c", back: "d" },
+];
 
 function App() {
-  const [cardsAmount, setCardsAmount] = useState(1)
-  const [cards, setCards] = useState([{}]);
+  const [cardsArray, setCardsArray] = useState<CardObject[]>([]);
+  const [isNewCardDisplayed, setIsNewCardDisplayed] = useState(false);
 
   const handleAddCardButtonClick = () => {
-    setCardsAmount(cardsAmount+1)
-    setCards(prevCards => [...prevCards, {}]);
+    setIsNewCardDisplayed(true);
   };
-  
 
-  const renderCards = () => {
-    return cards.map(() => (
-      <Card cardsAmount={cardsAmount} setCardsAmount={setCardsAmount} />
-    ));
+  const handleSaveButtonClick = (card: CardObject) => {
+    setCardsArray([
+      { face: card.face, back: card.back },
+      ...cardsArray,
+    ]);    
+    setIsNewCardDisplayed(false);
+  };
+
+  const handleCancelButtonClick = () => {
+    setIsNewCardDisplayed(false);
   };
 
   return (
     <AppLayout>
       <AppHeader
-        cardsAmount={cardsAmount}
+        cardsAmount={cardsArray.length + (isNewCardDisplayed ? 1 : 0)}
         logoURL={logo}
         onClick={handleAddCardButtonClick}
       />
-      <div className={styles.renderContainer}>{renderCards()}</div>
+      <div className={styles.renderContainer}>
+        {isNewCardDisplayed && (
+          <NewCard
+            onSave={handleSaveButtonClick}
+            onCancel={handleCancelButtonClick}
+          />
+        )}
+        {cardsArray.map((card, index) => (
+          <Card faceValue={card.face} flipValue={card.back} key={index} onDelete={()=>{}} />
+        ))}
+      </div>
     </AppLayout>
   );
 }
