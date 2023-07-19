@@ -23,18 +23,18 @@ const CARDSMEMORY = [
 ];
 
 function App() {
-  const [cardsArray, setCardsArray] = useState<CardObject[]>(CARDSMEMORY);
+  const [cardsArray, setCardsArray] = useState<CardObject[]>([]);
   const [isNewCardDisplayed, setIsNewCardDisplayed] = useState(false);
 
   const handleAddCardButtonClick = () => {
     setIsNewCardDisplayed(true);
   };
 
-  const handleSaveButtonClick = (props: CardObject) => {
+  const handleSaveButtonClick = (card: CardObject) => {
     setCardsArray([
-      { face: props.face, back: props.back},
+      { face: card.face, back: card.back },
       ...cardsArray,
-    ]);
+    ]);    
     setIsNewCardDisplayed(false);
   };
 
@@ -57,7 +57,7 @@ function App() {
           />
         )}
         {cardsArray.map((card, index) => (
-          <Card faceValue={card.face} flipValue={card.back} key={index} />
+          <Card faceValue={card.face} flipValue={card.back} key={index} onDelete={()=>{}} />
         ))}
       </div>
     </AppLayout>

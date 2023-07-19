@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./Card.module.css";
 import { TextInput } from "./TextInput";
 import { SmallIconButton } from "./SmallIconButton";
@@ -7,33 +7,24 @@ import { BigButton } from "./BigButton";
 
 interface CardProps {
   /**side A of the card*/
-  faceValue?: string;
+  faceValue: string;
   /**side B of the card*/
-  flipValue?: string;
+  flipValue: string;
   /**text height */
   textHeight?: number;
-  /**unique number */
-  key: number;
+  onDelete: () => void
 }
 
 export const Card = (props: CardProps) => {
-  // text on side A
-  const [faceValue, setFaceValue] = useState(
-    props.faceValue ? props.faceValue : ""
-  );
+  // text on side A$
+  const [faceValue, setFaceValue] = useState("");
   // text on side B
-  const [flipValue, setFlipValue] = useState(
-    props.flipValue ? props.flipValue : ""
-  );
-
+  const [flipValue, setFlipValue] = useState("");
   //wether we're editing the card
   const [editEnabled, setEditEnabled] = useState(false);
-
   //flipState on = side A displayed, flipState off = side B
   const [flipState, setFlipState] = useState(true);
 
-  //state used for controlling the default display of input
-  //and effect for making sure it properly displays
   const [inputDisplayValue, setInputDisplayValue] = useState(
     flipState ? faceValue : flipValue
   );
@@ -42,13 +33,19 @@ export const Card = (props: CardProps) => {
     setInputDisplayValue(flipState ? faceValue : flipValue);
   }, [flipState, faceValue, flipValue]);
 
+  useEffect(() => {
+    setFaceValue(props.faceValue)
+  }, [props.faceValue]);
+  
+  useEffect(() => {
+    setFlipValue(props.flipValue)
+  }, [props.flipValue]);
+
   //state used for changing the height of the text display
   const [textOutputHeight, setTextOutputHeight] = useState(
     props.textHeight ? props.textHeight : 19
   );
 
-  //state and custom event for handling card removal
-  const [removeStatus, setRemoveStatus] = useState(false);
 
   function handleTap() {
     setFlipState(!flipState);
@@ -73,9 +70,7 @@ export const Card = (props: CardProps) => {
     if (event) event.stopPropagation();
   };
 
-  const handleDeleteButtonClick = (event?: React.MouseEvent) => {
-    setRemoveStatus(true)
-  };
+
 
   const handleTextInputOnChange = function (event: React.ChangeEvent) {
     const target = event.target as HTMLTextAreaElement;
@@ -84,12 +79,11 @@ export const Card = (props: CardProps) => {
     setTextOutputHeight(target.scrollHeight);
   };
 
-  if (removeStatus) return null;
 
   if (editEnabled) {
     return (
       <div className={styles.card} onClick={() => {}}>
-        <SmallIconButton type={"delete"} onClick={handleDeleteButtonClick} />
+        <SmallIconButton type={"delete"} onClick={props.onDelete} />
         <TextInput
           height={textOutputHeight}
           value={inputDisplayValue}

@@ -4,7 +4,6 @@ import { TextInput } from "./TextInput";
 import { SmallIconButton } from "./SmallIconButton";
 import { TextOutput } from "./TextOutput";
 import { BigButton } from "./BigButton";
-import { Card } from "./Card";
 
 interface CardObject {
   face: string;
@@ -12,8 +11,8 @@ interface CardObject {
 }
 
 interface NewCardProps {
-  onSave: (props: CardObject)=>void
-  onCancel: ()=>void
+  onSave: (props: CardObject) => void;
+  onCancel: () => void;
 }
 
 export const NewCard = (props: NewCardProps) => {
@@ -38,15 +37,15 @@ export const NewCard = (props: NewCardProps) => {
   //state used for changing the height of the text display
   const [textOutputHeight, setTextOutputHeight] = useState(19);
 
-
-
   const handleNextButtonClick = () => {
     setFaceValue(inputDisplayValue);
+    setInputDisplayValue("");
     setFlipState(!flipState);
   };
   const handleSaveButtonClick = () => {
-    props.onSave({face: faceValue, back: inputDisplayValue})
-    setFlipValue(inputDisplayValue)
+    props.onSave({ face: faceValue, back: inputDisplayValue });
+    setFaceValue("");
+    setInputDisplayValue("");
   };
   const handleBackButtonClick = (event?: React.MouseEvent) => {
     setFlipState(!flipState);
@@ -54,7 +53,7 @@ export const NewCard = (props: NewCardProps) => {
   };
 
   const handleDeleteButtonClick = (event?: React.MouseEvent) => {
-    props.onCancel()
+    props.onCancel();
     if (event) event.stopPropagation();
   };
 
@@ -65,36 +64,37 @@ export const NewCard = (props: NewCardProps) => {
     setTextOutputHeight(target.scrollHeight);
   };
 
-    return (
-      <div className={styles.card} onClick={() => {}}>
-        { flipState ? <TextOutput height={10} /> :  <SmallIconButton type={"delete"} onClick={handleDeleteButtonClick} />}
-        {!flipState && (
-          <TextOutput height={12} className={styles.caption}>
-            {faceValue}
-          </TextOutput>
-        )}
-        <TextInput
-          height={39}
-          value={inputDisplayValue}
-          onChange={handleTextInputOnChange}
-        />
-        <div className={styles.buttonWrapper}>
-          <BigButton
-            colorToggle={false}
-            onClick={
-              flipState ? handleDeleteButtonClick : handleBackButtonClick
-            }
-          >
-            {flipState ? "Cancel" : "Back"}
-          </BigButton>
-          <BigButton
-            colorToggle={true}
-            onClick={flipState ? handleNextButtonClick : handleSaveButtonClick}
-          >
-            {flipState ? "Next" : "Save"}
-          </BigButton>
-        </div>
+  return (
+    <div className={styles.card} onClick={() => {}}>
+      {flipState ? (
+        <TextOutput height={10} />
+      ) : (
+        <SmallIconButton type={"delete"} onClick={handleDeleteButtonClick} />
+      )}
+      {!flipState && (
+        <TextOutput height={12} className={styles.caption}>
+          {faceValue}
+        </TextOutput>
+      )}
+      <TextInput
+        height={39}
+        value={inputDisplayValue}
+        onChange={handleTextInputOnChange}
+      />
+      <div className={styles.buttonWrapper}>
+        <BigButton
+          colorToggle={false}
+          onClick={flipState ? handleDeleteButtonClick : handleBackButtonClick}
+        >
+          {flipState ? "Cancel" : "Back"}
+        </BigButton>
+        <BigButton
+          colorToggle={true}
+          onClick={flipState ? handleNextButtonClick : handleSaveButtonClick}
+        >
+          {flipState ? "Next" : "Save"}
+        </BigButton>
       </div>
-    );
-  
+    </div>
+  );
 };
