@@ -13,7 +13,9 @@ interface CardProps {
   flipValue: string;
   /**text height */
   textHeight?: number;
-  onDelete: () => void;
+  /**identificator */
+  id: number;
+  onDelete: (id: number) => void;
 }
 
 export const Card = (props: CardProps) => {
@@ -78,6 +80,15 @@ export const Card = (props: CardProps) => {
     setInputDisplayValue(target.value.trim());
   };
 
+  const handleDeleteButtonClick = (event?: React.MouseEvent) => {
+    props.onDelete(props.id)
+    //somehow deleting a card enabled edit mode on the next 
+    //card, and using the setter here stops this behaviour
+    //should this be moved into a useEffect or something?
+    setEditEnabled(!editEnabled);
+    if (event) event.stopPropagation();
+  }
+
   useEffect(() => {
     let linesAmount = countTextLines(inputDisplayValue)
     let calculatedHeight = 20 + (linesAmount * 19);
@@ -87,7 +98,7 @@ export const Card = (props: CardProps) => {
   if (editEnabled) {
     return (
       <div className={styles.card} onClick={() => {}}>
-        <SmallIconButton type={"delete"} onClick={props.onDelete} />
+        <SmallIconButton type={"delete"} onClick={handleDeleteButtonClick} />
         <TextInput
           height={maxTextHeight}
           value={inputDisplayValue}

@@ -43,6 +43,12 @@ function App() {
     setIsNewCardDisplayed(false);
   };
 
+  const handleDeleteButtonClick = (id: number) => {
+    const newCardsArray = cardsArray.filter((_, index) => index != id)
+    setCardsArray(newCardsArray)
+  }
+
+
   return (
     <AppLayout>
       <AppHeader
@@ -58,7 +64,7 @@ function App() {
           />
         )}
         {cardsArray.map((card, index) => (
-          <Card faceValue={card.face} flipValue={card.back} key={index} onDelete={()=>{}} />
+          <Card faceValue={card.face} flipValue={card.back} key={index} id={index} onDelete={handleDeleteButtonClick} />
         ))}
       </div>
     </AppLayout>
