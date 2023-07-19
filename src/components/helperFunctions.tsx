@@ -10,7 +10,7 @@ export function countTextLines(text: string) {
       const testLine = line + words[i] + " ";
       const metrics = context.measureText(testLine);
       const testWidth = metrics.width;
-      if (testWidth > 311 && i > 0) {
+      if (testWidth > 287 && i > 0) {
         lines++;
         line = words[i] + " ";
       } else {

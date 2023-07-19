@@ -1,34 +1,31 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./Card.module.css";
 import { TextInput } from "./TextInput";
 import { SmallIconButton } from "./SmallIconButton";
 import { TextOutput } from "./TextOutput";
 import { BigButton } from "./BigButton";
-import {countTextLines} from "./helperFunctions"
-
+import { countTextLines } from "./helperFunctions";
 
 interface CardProps {
   /**side A of the card*/
   faceValue: string;
   /**side B of the card*/
   flipValue: string;
-  /**unique number */
-  key: number;
+  /**text height */
+  textHeight?: number;
+  onDelete: () => void;
 }
 
 export const Card = (props: CardProps) => {
-  // text on side A
-  const [faceValue, setFaceValue] = useState(props.faceValue);
+  // text on side A$
+  const [faceValue, setFaceValue] = useState("");
   // text on side B
-  const [flipValue, setFlipValue] = useState(props.flipValue);
+  const [flipValue, setFlipValue] = useState("");
   //wether we're editing the card
   const [editEnabled, setEditEnabled] = useState(false);
-
   //flipState on = side A displayed, flipState off = side B
   const [flipState, setFlipState] = useState(true);
 
-  //state used for controlling the default display of input
-  //and effect for making sure it properly displays
   const [inputDisplayValue, setInputDisplayValue] = useState(
     flipState ? faceValue : flipValue
   );
@@ -37,12 +34,21 @@ export const Card = (props: CardProps) => {
     setInputDisplayValue(flipState ? faceValue : flipValue);
   }, [flipState, faceValue, flipValue]);
 
-  
-  const initialTextHeight = 20 + countTextLines(faceValue.length > flipValue.length ? faceValue : flipValue) * 19
-  const [maxTextHeight, setMaxTextHeight] = useState(initialTextHeight);
+  useEffect(() => {
+    setFaceValue(props.faceValue);
+  }, [props.faceValue]);
 
-  //state and custom event for handling card removal
-  const [removeStatus, setRemoveStatus] = useState(false);
+  useEffect(() => {
+    setFlipValue(props.flipValue);
+  }, [props.flipValue]);
+
+  const initialTextHeight =
+    20 +
+    countTextLines(
+      props.faceValue.length > props.flipValue.length ? props.faceValue : props.flipValue
+    ) *
+      19;
+  const [maxTextHeight, setMaxTextHeight] = useState(initialTextHeight);
 
   function handleTap() {
     setFlipState(!flipState);
@@ -67,26 +73,21 @@ export const Card = (props: CardProps) => {
     if (event) event.stopPropagation();
   };
 
-  const handleDeleteButtonClick = (event?: React.MouseEvent) => {
-    setRemoveStatus(true);
-  };
-
   const handleTextInputOnChange = function (event: React.ChangeEvent) {
     const target = event.target as HTMLTextAreaElement;
-    setInputDisplayValue(target.value);
-    const newHeight = target.scrollHeight > maxTextHeight ? target.scrollHeight : maxTextHeight
-    target.style.height = `${newHeight}px`;
-    setMaxTextHeight(newHeight);
+    setInputDisplayValue(target.value.trim());
   };
 
-
-
-  if (removeStatus) return null;
+  useEffect(() => {
+    let linesAmount = countTextLines(inputDisplayValue)
+    let calculatedHeight = 20 + (linesAmount * 19);
+    if (calculatedHeight > maxTextHeight) setMaxTextHeight(calculatedHeight)
+  }, [inputDisplayValue])
 
   if (editEnabled) {
     return (
       <div className={styles.card} onClick={() => {}}>
-        <SmallIconButton type={"delete"} onClick={handleDeleteButtonClick} />
+        <SmallIconButton type={"delete"} onClick={props.onDelete} />
         <TextInput
           height={maxTextHeight}
           value={inputDisplayValue}

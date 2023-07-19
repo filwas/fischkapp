@@ -16,7 +16,7 @@ export const TextInput = (props: TextProps) => {
       disabled={props.disabled}
       value={props.value}
       autoFocus={true}
-      style={{ height: props.height+"px" }}
+      style={{height: props.height ? props.height + "px" : "" }}
     ></textarea>
   );
 };
