@@ -6,6 +6,7 @@ import styles from "./App.module.css";
 import { Card } from "./components/Card";
 import { JSX, useEffect, useState } from "react";
 import { NewCard } from "./components/NewCard";
+import React from "react";
 
 
 interface CardObject {

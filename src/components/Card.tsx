@@ -4,6 +4,7 @@ import { TextInput } from "./TextInput";
 import { SmallIconButton } from "./SmallIconButton";
 import { TextOutput } from "./TextOutput";
 import { BigButton } from "./BigButton";
+import { countTextLines } from "./helperFunctions";
 
 interface CardProps {
   /**side A of the card*/
@@ -12,7 +13,7 @@ interface CardProps {
   flipValue: string;
   /**text height */
   textHeight?: number;
-  onDelete: () => void
+  onDelete: () => void;
 }
 
 export const Card = (props: CardProps) => {
@@ -34,18 +35,20 @@ export const Card = (props: CardProps) => {
   }, [flipState, faceValue, flipValue]);
 
   useEffect(() => {
-    setFaceValue(props.faceValue)
+    setFaceValue(props.faceValue);
   }, [props.faceValue]);
-  
+
   useEffect(() => {
-    setFlipValue(props.flipValue)
+    setFlipValue(props.flipValue);
   }, [props.flipValue]);
 
-  //state used for changing the height of the text display
-  const [textOutputHeight, setTextOutputHeight] = useState(
-    props.textHeight ? props.textHeight : 19
-  );
-
+  const initialTextHeight =
+    20 +
+    countTextLines(
+      props.faceValue.length > props.flipValue.length ? props.faceValue : props.flipValue
+    ) *
+      19;
+  const [maxTextHeight, setMaxTextHeight] = useState(initialTextHeight);
 
   function handleTap() {
     setFlipState(!flipState);
@@ -70,22 +73,23 @@ export const Card = (props: CardProps) => {
     if (event) event.stopPropagation();
   };
 
-
-
   const handleTextInputOnChange = function (event: React.ChangeEvent) {
     const target = event.target as HTMLTextAreaElement;
-    setInputDisplayValue(target.value);
-    target.style.height = `${target.scrollHeight}px`;
-    setTextOutputHeight(target.scrollHeight);
+    setInputDisplayValue(target.value.trim());
   };
 
+  useEffect(() => {
+    let linesAmount = countTextLines(inputDisplayValue)
+    let calculatedHeight = 20 + (linesAmount * 19);
+    if (calculatedHeight > maxTextHeight) setMaxTextHeight(calculatedHeight)
+  }, [inputDisplayValue])
 
   if (editEnabled) {
     return (
       <div className={styles.card} onClick={() => {}}>
         <SmallIconButton type={"delete"} onClick={props.onDelete} />
         <TextInput
-          height={textOutputHeight}
+          height={maxTextHeight}
           value={inputDisplayValue}
           onChange={handleTextInputOnChange}
         />
@@ -103,13 +107,13 @@ export const Card = (props: CardProps) => {
     return (
       <div className={styles.card} onClick={handleTap}>
         <SmallIconButton type={"edit"} onClick={handleEditButtonClick} />
-        <TextOutput height={textOutputHeight}>
+        <TextOutput height={maxTextHeight}>
           {flipState ? faceValue : flipValue}
         </TextOutput>
         {/**this second, empty textoutput exists only so that i can simply use
          * a single "justify-content: space-between;" on it's wrapper div
          * to make it look exactly like the project requirements! :D*/}
-        <TextOutput height={19}></TextOutput>
+        <TextOutput></TextOutput>
       </div>
     );
   }

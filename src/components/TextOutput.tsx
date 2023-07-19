@@ -10,7 +10,7 @@ export const TextOutput = (props: TextOutputProps) => {
   return (
     <div
       className={props.className ? props.className : styles.output}
-      style={{ height: props.height+"px" }}
+      style={  { height: props.height ? props.height + "px" : "" }}
     >
       {props.children}
     </div>
