@@ -47,14 +47,14 @@ export const NewCard = (props: NewCardProps) => {
     setInputDisplayValue("");
   };
   const handleBackButtonClick = (event?: React.MouseEvent) => {
+    if (event) event.stopPropagation();
     setFlipState(!flipState);
     setInputDisplayValue(faceValue);
-    if (event) event.stopPropagation();
   };
 
   const handleDeleteButtonClick = (event?: React.MouseEvent) => {
-    props.onCancel();
     if (event) event.stopPropagation();
+    props.onCancel();
   };
 
   const handleTextInputOnChange = function (event: React.ChangeEvent) {
