@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./Card.module.css";
 import { TextInput } from "./TextInput";
 import { SmallIconButton } from "./SmallIconButton";
 import { TextOutput } from "./TextOutput";
 import { BigButton } from "./BigButton";
-import { Card } from "./Card";
+import { countTextLines } from "./helperFunctions";
 
 interface CardObject {
   face: string;
@@ -26,8 +26,15 @@ export const NewCard = (props: NewCardProps) => {
 
   //state used for controlling the default display of input
   //and effect for making sure it properly displays
-  const [inputDisplayValue, setInputDisplayValue] = useState("");
-  const [textOutputHeight, setTextOutputHeight] = useState(39);
+  const [inputDisplayValue, setInputDisplayValue] = useState(
+    flipState ? faceValue : ""
+  );
+
+  useEffect(() => {
+    setInputDisplayValue(flipState ? faceValue : "");
+  }, [flipState, faceValue]);
+
+  const [textHeight, setTextHeight] = useState(39);
 
   const handleNextButtonClick = () => {
     setFaceValue(inputDisplayValue);
@@ -36,6 +43,8 @@ export const NewCard = (props: NewCardProps) => {
   };
   const handleSaveButtonClick = () => {
     props.onSave({ face: faceValue, back: inputDisplayValue });
+    setFaceValue("");
+    setInputDisplayValue("");
   };
   const handleBackButtonClick = (event?: React.MouseEvent) => {
     setFlipState(!flipState);
@@ -50,23 +59,29 @@ export const NewCard = (props: NewCardProps) => {
 
   const handleTextInputOnChange = function (event: React.ChangeEvent) {
     const target = event.target as HTMLTextAreaElement;
-    setInputDisplayValue(target.value);
-    target.style.height = `${target.scrollHeight}px`;
-    setTextOutputHeight(target.scrollHeight);
+    setInputDisplayValue(target.value.trim());
   };
+
+  useEffect(() => {
+    let linesAmount = countTextLines(inputDisplayValue)
+    let calculatedHeight = 20 + (linesAmount * 19);
+    setTextHeight(calculatedHeight)
+  }, [inputDisplayValue])
 
   return (
     <div className={styles.card} onClick={() => {}}>
       {flipState ? (
-        <TextOutput />
+        <TextOutput height={10} />
       ) : (
         <SmallIconButton type={"delete"} onClick={handleDeleteButtonClick} />
       )}
       {!flipState && (
-        <TextOutput className={styles.caption}>{faceValue}</TextOutput>
+        <TextOutput className={styles.caption}>
+          {faceValue}
+        </TextOutput>
       )}
       <TextInput
-        height={textOutputHeight}
+        height={textHeight}
         value={inputDisplayValue}
         onChange={handleTextInputOnChange}
       />
