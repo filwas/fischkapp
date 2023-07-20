@@ -59,7 +59,7 @@ export const NewCard = (props: NewCardProps) => {
 
   const handleTextInputOnChange = function (event: React.ChangeEvent) {
     const target = event.target as HTMLTextAreaElement;
-    setInputDisplayValue(target.value.trim());
+    setInputDisplayValue(target.value);
   };
 
   useEffect(() => {

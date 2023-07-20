@@ -87,7 +87,7 @@ export const Card = (props: CardProps) => {
 
   const handleTextInputOnChange = function (event: React.ChangeEvent) {
     const target = event.target as HTMLTextAreaElement;
-    setInputDisplayValue(target.value.trim());
+    setInputDisplayValue(target.value);
   };
 
   const dynamicClasses = [
