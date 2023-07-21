@@ -4,15 +4,18 @@ import logo from "../public/FischLogo.svg";
 
 import styles from "./App.module.css";
 import { Card } from "./components/Card";
-import { JSX, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { NewCard } from "./components/NewCard";
 import React from "react";
+import { importCards } from "./apiService";
 
 
 interface CardObject {
   face: string;
   back: string;
 }
+
+
 
 //obviously this will be gone when i'll implement fetch and stuff.
 //it was previously provided via props, no real reason, it was just
@@ -48,6 +51,16 @@ function App() {
     setCardsArray(newCardsArray)
   }
 
+  
+  useEffect(() => {
+    importCards().then((importedCardsArray) => {
+      setCardsArray(importedCardsArray)
+    })
+    .catch((error) => {
+      console.error("Error fetching cards", error)
+    })
+  }, [])
+  
 
   return (
     <AppLayout>
