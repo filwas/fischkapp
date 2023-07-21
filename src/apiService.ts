@@ -1,4 +1,3 @@
-// apiService.ts
 export const customFetch = async <T>(
   url: string,
   options: RequestInit = {}
@@ -19,21 +18,29 @@ export const customFetch = async <T>(
   }
 };
 
-// apiService.ts
+
+
 interface CardObject {
   face: string;
   back: string;
+  id: string;
+}
+
+interface ImportedCardObject {
+  front: string;
+  back: string;
+  _id: string;
 }
 
 export const importCards = async (): Promise<CardObject[]> => {
   try {
-    // Use the customFetch function to get the data from the API
-    const data = await customFetch<CardObject[]>(""); // Replace '/endpoint' with your actual API endpoint
+    const data = await customFetch<ImportedCardObject[]>("");
 
-    // Map the response data to include only the required properties (_id, front, and back)
+    //changing the ImportedCardObject into CardObject
     const importedCardsArray: CardObject[] = data.map((card) => ({
       face: card.front,
       back: card.back,
+      id: card._id,
     }));
 
     return importedCardsArray;

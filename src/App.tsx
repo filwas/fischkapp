@@ -13,18 +13,9 @@ import { importCards } from "./apiService";
 interface CardObject {
   face: string;
   back: string;
+  id: string;
 }
 
-
-
-//obviously this will be gone when i'll implement fetch and stuff.
-//it was previously provided via props, no real reason, it was just
-//a proof of concept that the app will accept such array of incoming
-//cards in the future.
-const CARDSMEMORY = [
-  { face: "a", back: "b" },
-  { face: "c", back: "d" },
-];
 
 function App() {
   const [cardsArray, setCardsArray] = useState<CardObject[]>([]);
@@ -36,7 +27,7 @@ function App() {
 
   const handleSaveButtonClick = (card: CardObject) => {
     setCardsArray([
-      { face: card.face, back: card.back },
+      { face: card.face, back: card.back, id: card.id },
       ...cardsArray,
     ]);    
     setIsNewCardDisplayed(false);
@@ -46,8 +37,8 @@ function App() {
     setIsNewCardDisplayed(false);
   };
 
-  const handleDeleteButtonClick = (id: number) => {
-    const newCardsArray = cardsArray.filter((_, index) => index != id)
+  const handleDeleteButtonClick = (id: string) => {
+    const newCardsArray = cardsArray.filter((card) => card.id != id)
     setCardsArray(newCardsArray)
   }
 
@@ -77,7 +68,7 @@ function App() {
           />
         )}
         {cardsArray.map((card, index) => (
-          <Card faceValue={card.face} flipValue={card.back} key={index} id={index} onDelete={handleDeleteButtonClick} />
+          <Card faceValue={card.face} flipValue={card.back} key={index} id={card.id} onDelete={handleDeleteButtonClick} />
         ))}
       </div>
     </AppLayout>
