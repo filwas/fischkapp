@@ -47,7 +47,16 @@ function App() {
     const newCardsArray = cardsArray.filter((_, index) => index != id)
     setCardsArray(newCardsArray)
   }
-
+  
+  useEffect(() => {
+    importCards().then((importedCardsArray) => {
+      setCardsArray(importedCardsArray)
+    })
+    .catch((error) => {
+      console.error("Error fetching cards", error)
+    })
+  }, [])
+  
 
   return (
     <AppLayout>
