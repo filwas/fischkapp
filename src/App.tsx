@@ -62,7 +62,7 @@ function App() {
             onCancel={handleCancelButtonClick}
           />
         )}
-        {cardsArray.map((card, index) => (
+        {[...cardsArray].reverse().map((card, index) => (
           <Card
             faceValue={card.face}
             flipValue={card.back}
