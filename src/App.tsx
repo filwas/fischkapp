@@ -1,13 +1,13 @@
 import { AppHeader } from "./components/AppHeader";
 import { AppLayout } from "./components/AppLayout";
-import logo from "../public/FischLogo.svg";
+import logo from "./assets/fischLogo.svg"
 
 import styles from "./App.module.css";
 import { Card } from "./components/Card";
 import { useEffect, useState } from "react";
 import { NewCard } from "./components/NewCard";
 import React from "react";
-import { exportCard, importCards, patchCard } from "./apiService";
+import { deleteCard, exportCard, importCards, patchCard } from "./apiService";
 import { CardObject } from "./types/types";
 
 
@@ -32,7 +32,8 @@ function App() {
     setIsNewCardDisplayed(false);
   };
 
-  const handleDeleteButtonClick = (id: string) => {
+  const handleDeleteButtonClick = async (id: string) => {
+    await deleteCard(id)
     const newCardsArray = cardsArray.filter((card) => card.id != id);
     setCardsArray(newCardsArray);
   };
@@ -45,7 +46,7 @@ function App() {
       .catch((error) => {
         console.error("Error fetching cards", error);
       });
-  }, []);
+  }, [isNewCardDisplayed]);
 
   return (
     <AppLayout>

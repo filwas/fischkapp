@@ -19,8 +19,6 @@ export const customFetch = async <T>(
   }
 };
 
-
-
 interface ImportedCardObject {
   front: string;
   back: string;
@@ -80,6 +78,21 @@ export const patchCard = async (card: CardObject): Promise<void> => {
     };
 
     await customFetch(card.id, options);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const deleteCard = async (id: string): Promise<void> => {
+  try {
+    const options: RequestInit = {
+      method: "DELETE",
+      headers: {
+        Authorization: "secret_token",
+      },
+    };
+
+    await customFetch(id, options);
   } catch (error) {
     throw error;
   }

@@ -1,6 +1,6 @@
 import React, { PropsWithChildren } from "react";
 import styles from "./AddNewCardButton.module.css";
-import addNew from "../../public/addNew.svg";
+import addNew from "../assets/addNew.svg";
 
 interface AddNewCardButtonProps extends PropsWithChildren{
   onClick(): void;
