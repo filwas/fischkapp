@@ -7,7 +7,7 @@ import { Card } from "./components/Card";
 import { useEffect, useState } from "react";
 import { NewCard } from "./components/NewCard";
 import React from "react";
-import { importCards } from "./apiService";
+import { exportCard, importCards } from "./apiService";
 
 
 interface CardObject {
@@ -25,11 +25,10 @@ function App() {
     setIsNewCardDisplayed(true);
   };
 
-  const handleSaveButtonClick = (card: CardObject) => {
-    setCardsArray([
-      { face: card.face, back: card.back, id: card.id },
-      ...cardsArray,
-    ]);    
+  const handleSaveButtonClick = async (card: CardObject) => {
+
+    await exportCard(card)
+
     setIsNewCardDisplayed(false);
   };
 
