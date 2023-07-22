@@ -5,6 +5,7 @@ import { SmallIconButton } from "./SmallIconButton";
 import { TextOutput } from "./TextOutput";
 import { BigButton } from "./BigButton";
 import { countTextLines } from "./helperFunctions";
+import { CardObject } from "../types/types";
 
 interface CardProps {
   /**side A of the card*/
@@ -15,7 +16,10 @@ interface CardProps {
   textHeight?: number;
   /**identificator */
   id: string;
+  /**delete handler */
   onDelete: (id: string) => void;
+  /**patch handler */
+  onUpdate: (card: CardObject) => void;
 }
 
 export const Card = (props: CardProps) => {
@@ -67,22 +71,32 @@ export const Card = (props: CardProps) => {
   }
 
   function handleEditButtonClick(event?: React.MouseEvent) {
-    setEditEnabled(!editEnabled);
     event && event.stopPropagation();
+    setEditEnabled(!editEnabled);
   }
 
   const handleCancelButtonClick = () => {
     handleEditButtonClick();
   };
 
-  const handleSaveButtonClick = (event?: React.MouseEvent) => {
+  const handleSaveButtonClick = async (event?: React.MouseEvent) => {
+    if (event) event.stopPropagation();
     if (flipState) {
+      props.onUpdate({
+        id: props.id,
+        face: inputDisplayValue,
+        back: flipValue
+      })
       setFaceValue(inputDisplayValue);
     } else {
+      props.onUpdate({
+        id: props.id,
+        face: faceValue,
+        back: inputDisplayValue
+      })
       setFlipValue(inputDisplayValue);
     }
     handleEditButtonClick();
-    if (event) event.stopPropagation();
   };
 
   const handleTextInputOnChange = function (event: React.ChangeEvent) {

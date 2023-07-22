@@ -7,14 +7,8 @@ import { Card } from "./components/Card";
 import { useEffect, useState } from "react";
 import { NewCard } from "./components/NewCard";
 import React from "react";
-import { exportCard, importCards } from "./apiService";
-
-
-interface CardObject {
-  face: string;
-  back: string;
-  id: string;
-}
+import { exportCard, importCards, patchCard } from "./apiService";
+import { CardObject } from "./types/types";
 
 
 function App() {
@@ -26,10 +20,12 @@ function App() {
   };
 
   const handleSaveButtonClick = async (card: CardObject) => {
-
-    await exportCard(card)
-
+    await exportCard(card);
     setIsNewCardDisplayed(false);
+  };
+
+  const handleUpdateButtonClick = async (card: CardObject) => {
+    await patchCard(card);
   };
 
   const handleCancelButtonClick = () => {
@@ -37,19 +33,19 @@ function App() {
   };
 
   const handleDeleteButtonClick = (id: string) => {
-    const newCardsArray = cardsArray.filter((card) => card.id != id)
-    setCardsArray(newCardsArray)
-  }
-  
+    const newCardsArray = cardsArray.filter((card) => card.id != id);
+    setCardsArray(newCardsArray);
+  };
+
   useEffect(() => {
-    importCards().then((importedCardsArray) => {
-      setCardsArray(importedCardsArray)
-    })
-    .catch((error) => {
-      console.error("Error fetching cards", error)
-    })
-  }, [])
-  
+    importCards()
+      .then((importedCardsArray) => {
+        setCardsArray(importedCardsArray);
+      })
+      .catch((error) => {
+        console.error("Error fetching cards", error);
+      });
+  }, []);
 
   return (
     <AppLayout>
@@ -66,7 +62,14 @@ function App() {
           />
         )}
         {cardsArray.map((card, index) => (
-          <Card faceValue={card.face} flipValue={card.back} key={index} id={card.id} onDelete={handleDeleteButtonClick} />
+          <Card
+            faceValue={card.face}
+            flipValue={card.back}
+            key={index}
+            id={card.id}
+            onDelete={handleDeleteButtonClick}
+            onUpdate={handleUpdateButtonClick}
+          />
         ))}
       </div>
     </AppLayout>

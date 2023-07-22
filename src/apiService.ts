@@ -1,11 +1,12 @@
-const APISTRING = "https://training.nerdbord.io/api/v1/fischkapp/flashcards";
+import { CardObject } from "./types/types";
+const APIURL = "https://training.nerdbord.io/api/v1/fischkapp/flashcards/";
 
 export const customFetch = async <T>(
   endpointUrl: string,
   options: RequestInit = {}
 ): Promise<T> => {
   try {
-    const response = await fetch(APISTRING + endpointUrl, options);
+    const response = await fetch(APIURL + endpointUrl, options);
 
     if (!response.ok) {
       console.log(response);
@@ -18,11 +19,7 @@ export const customFetch = async <T>(
   }
 };
 
-interface CardObject {
-  face: string;
-  back: string;
-  id: string;
-}
+
 
 interface ImportedCardObject {
   front: string;
@@ -62,6 +59,27 @@ export const exportCard = async (card: CardObject): Promise<void> => {
     };
 
     await customFetch("", options);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const patchCard = async (card: CardObject): Promise<void> => {
+  try {
+    const options: RequestInit = {
+      method: "PATCH",
+      headers: {
+        Authorization: "secret_token",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id: card.id,
+        front: card.face,
+        back: card.back,
+      }),
+    };
+
+    await customFetch(card.id, options);
   } catch (error) {
     throw error;
   }

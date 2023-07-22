@@ -5,12 +5,8 @@ import { SmallIconButton } from "./SmallIconButton";
 import { TextOutput } from "./TextOutput";
 import { BigButton } from "./BigButton";
 import { countTextLines } from "./helperFunctions";
+import { CardObject } from "../types/types";
 
-interface CardObject {
-  face: string;
-  back: string;
-  id: string;
-}
 
 interface NewCardProps {
   onSave: (props: CardObject) => void;
@@ -43,7 +39,7 @@ export const NewCard = (props: NewCardProps) => {
     setFlipState(!flipState);
   };
   const handleSaveButtonClick = () => {
-    props.onSave({ face: faceValue, back: inputDisplayValue, id: "asdf" });
+    props.onSave({ face: faceValue, back: inputDisplayValue, id: "" });
     setFaceValue("");
     setInputDisplayValue("");
   };
