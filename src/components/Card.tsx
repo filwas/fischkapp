@@ -14,8 +14,8 @@ interface CardProps {
   /**text height */
   textHeight?: number;
   /**identificator */
-  id: number;
-  onDelete: (id: number) => void;
+  id: string;
+  onDelete: (id: string) => void;
 }
 
 export const Card = (props: CardProps) => {
@@ -109,6 +109,8 @@ export const Card = (props: CardProps) => {
     let calculatedHeight = 20 + (linesAmount * 19);
     if (calculatedHeight > maxTextHeight) setMaxTextHeight(calculatedHeight)
   }, [inputDisplayValue])
+
+
 
   if (editEnabled) {
     return (

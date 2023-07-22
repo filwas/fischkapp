@@ -50,4 +50,3 @@ export const importCards = async (): Promise<CardObject[]> => {
     throw error;
   }
 };
-

@@ -9,6 +9,7 @@ import { countTextLines } from "./helperFunctions";
 interface CardObject {
   face: string;
   back: string;
+  id: string;
 }
 
 interface NewCardProps {
@@ -42,7 +43,7 @@ export const NewCard = (props: NewCardProps) => {
     setFlipState(!flipState);
   };
   const handleSaveButtonClick = () => {
-    props.onSave({ face: faceValue, back: inputDisplayValue });
+    props.onSave({ face: faceValue, back: inputDisplayValue, id: "asdf" });
     setFaceValue("");
     setInputDisplayValue("");
   };
