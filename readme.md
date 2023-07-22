@@ -4,6 +4,10 @@
 
 This project aims to create a simple app that supports learning.
 
+To view live version, please follow this link:
+
+https://filwas.github.io/fischkapp/
+
 ---
 
 ### 📝 Project requirements
