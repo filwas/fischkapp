@@ -40,3 +40,23 @@ export const fetchCards = async (): Promise<CardObject[]> => {
     throw error;
   }
 };
+
+export const uploadNewCard = async (card: CardObject): Promise<void> => {
+  try {
+    const options: RequestInit = {
+      method: "POST",
+      headers: {
+        Authorization: "secret_token",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        front: card.face,
+        back: card.back,
+      }),
+    };
+
+    await customFetch("", options);
+  } catch (error) {
+    throw error;
+  }
+};

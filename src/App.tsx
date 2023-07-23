@@ -1,13 +1,12 @@
 import { AppHeader } from "./components/AppHeader";
 import { AppLayout } from "./components/AppLayout";
-import logo from "../public/FischLogo.svg";
-
+import logo from "./assets/fischLogo.svg";
 import styles from "./App.module.css";
 import { Card } from "./components/Card";
 import { useEffect, useState } from "react";
 import { NewCard } from "./components/NewCard";
 import React from "react";
-import { fetchCards } from "./apiService";
+import { fetchCards, uploadNewCard } from "./apiService";
 import { CardObject } from "./types/types";
 
 function App() {
@@ -19,10 +18,7 @@ function App() {
   };
 
   const handleSaveButtonClick = (card: CardObject) => {
-    setCardsArray([
-      { face: card.face, back: card.back, id: card.id },
-      ...cardsArray,
-    ]);
+    uploadNewCard(card)
     setIsNewCardDisplayed(false);
   };
 
@@ -43,7 +39,7 @@ function App() {
       .catch((error) => {
         console.error("Error fetching cards", error);
       });
-  }, []);
+  }, [isNewCardDisplayed]);
 
   return (
     <AppLayout>
