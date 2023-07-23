@@ -1,15 +1,14 @@
 import { AppHeader } from "./components/AppHeader";
 import { AppLayout } from "./components/AppLayout";
-import logo from "./assets/fischLogo.svg"
+import logo from "../public/FischLogo.svg";
 
 import styles from "./App.module.css";
 import { Card } from "./components/Card";
 import { useEffect, useState } from "react";
 import { NewCard } from "./components/NewCard";
 import React from "react";
-import { deleteCard, exportCard, fetchCards, patchCard } from "./apiService";
+import { fetchCards } from "./apiService";
 import { CardObject } from "./types/types";
-
 
 function App() {
   const [cardsArray, setCardsArray] = useState<CardObject[]>([]);
@@ -19,21 +18,19 @@ function App() {
     setIsNewCardDisplayed(true);
   };
 
-  const handleSaveButtonClick = async (card: CardObject) => {
-    await exportCard(card);
+  const handleSaveButtonClick = (card: CardObject) => {
+    setCardsArray([
+      { face: card.face, back: card.back, id: card.id },
+      ...cardsArray,
+    ]);
     setIsNewCardDisplayed(false);
-  };
-
-  const handleUpdateButtonClick = async (card: CardObject) => {
-    await patchCard(card);
   };
 
   const handleCancelButtonClick = () => {
     setIsNewCardDisplayed(false);
   };
 
-  const handleDeleteButtonClick = async (id: string) => {
-    await deleteCard(id)
+  const handleDeleteButtonClick = (id: string) => {
     const newCardsArray = cardsArray.filter((card) => card.id != id);
     setCardsArray(newCardsArray);
   };
@@ -46,7 +43,7 @@ function App() {
       .catch((error) => {
         console.error("Error fetching cards", error);
       });
-  }, [isNewCardDisplayed]);
+  }, []);
 
   return (
     <AppLayout>
@@ -62,14 +59,13 @@ function App() {
             onCancel={handleCancelButtonClick}
           />
         )}
-        {[...cardsArray].reverse().map(card => (
+        {cardsArray.map((card) => (
           <Card
             faceValue={card.face}
             flipValue={card.back}
             key={card.id}
             id={card.id}
             onDelete={handleDeleteButtonClick}
-            onUpdate={handleUpdateButtonClick}
           />
         ))}
       </div>
