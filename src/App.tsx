@@ -7,7 +7,7 @@ import { Card } from "./components/Card";
 import { useEffect, useState } from "react";
 import { NewCard } from "./components/NewCard";
 import React from "react";
-import { deleteCard, exportCard, importCards, patchCard } from "./apiService";
+import { deleteCard, exportCard, fetchCards, patchCard } from "./apiService";
 import { CardObject } from "./types/types";
 
 
@@ -39,7 +39,7 @@ function App() {
   };
 
   useEffect(() => {
-    importCards()
+    fetchCards()
       .then((importedCardsArray) => {
         setCardsArray(importedCardsArray);
       })
@@ -62,11 +62,11 @@ function App() {
             onCancel={handleCancelButtonClick}
           />
         )}
-        {[...cardsArray].reverse().map((card, index) => (
+        {[...cardsArray].reverse().map(card => (
           <Card
             faceValue={card.face}
             flipValue={card.back}
-            key={index}
+            key={card.id}
             id={card.id}
             onDelete={handleDeleteButtonClick}
             onUpdate={handleUpdateButtonClick}
