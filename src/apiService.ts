@@ -1,5 +1,5 @@
 import { CardObject } from "./types/types";
-const APIURL = "https://training.nerdbord.io/api/v1/fischkapp/flashcards/";
+const APIURL = "https://training.nerdbord.io/api/v1/fischkapp";
 
 export const customFetch = async <T>(
   endpointUrl: string,
@@ -9,7 +9,6 @@ export const customFetch = async <T>(
     const response = await fetch(APIURL + endpointUrl, options);
 
     if (!response.ok) {
-      console.log(response);
       throw new Error("Network response was not ok");
     }
 
@@ -19,17 +18,15 @@ export const customFetch = async <T>(
   }
 };
 
-
-
 interface ImportedCardObject {
   front: string;
   back: string;
   _id: string;
 }
 
-export const importCards = async (): Promise<CardObject[]> => {
+export const fetchCards = async (): Promise<CardObject[]> => {
   try {
-    const data = await customFetch<ImportedCardObject[]>("");
+    const data = await customFetch<ImportedCardObject[]>("/flashcards");
 
     //changing the ImportedCardObject into CardObject
     const importedCardsArray: CardObject[] = data.map((card) => ({
@@ -44,7 +41,7 @@ export const importCards = async (): Promise<CardObject[]> => {
   }
 };
 
-export const exportCard = async (card: CardObject): Promise<void> => {
+export const uploadNewCard = async (card: CardObject): Promise<void> => {
   try {
     const options: RequestInit = {
       method: "POST",

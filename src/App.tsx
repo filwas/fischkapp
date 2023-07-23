@@ -1,13 +1,13 @@
 import { AppHeader } from "./components/AppHeader";
 import { AppLayout } from "./components/AppLayout";
-import logo from "../public/FischLogo.svg";
+import logo from "../FischLogo.svg";
 
 import styles from "./App.module.css";
 import { Card } from "./components/Card";
 import { useEffect, useState } from "react";
 import { NewCard } from "./components/NewCard";
 import React from "react";
-import { exportCard, importCards, patchCard } from "./apiService";
+import { uploadNewCard, fetchCards, patchCard } from "./apiService";
 import { CardObject } from "./types/types";
 
 
@@ -20,7 +20,7 @@ function App() {
   };
 
   const handleSaveButtonClick = async (card: CardObject) => {
-    await exportCard(card);
+    await uploadNewCard(card);
     setIsNewCardDisplayed(false);
   };
 
@@ -38,7 +38,7 @@ function App() {
   };
 
   useEffect(() => {
-    importCards()
+    fetchCards()
       .then((importedCardsArray) => {
         setCardsArray(importedCardsArray);
       })
