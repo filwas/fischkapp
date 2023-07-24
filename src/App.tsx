@@ -17,11 +17,12 @@ function App() {
     setIsNewCardDisplayed(true);
   };
 
-  const handleSaveButtonClick = (card: CardObject) => {
-    uploadNewCard(card)
+  const handleSaveButtonClick = async (card: CardObject) => {
+    uploadNewCard(card).then((uploadedCard: CardObject) => {
+      setCardsArray([...cardsArray, uploadedCard])
+    });
     setIsNewCardDisplayed(false);
   };
-
   const handleCancelButtonClick = () => {
     setIsNewCardDisplayed(false);
   };
@@ -39,7 +40,7 @@ function App() {
       .catch((error) => {
         console.error("Error fetching cards", error);
       });
-  }, [isNewCardDisplayed]);
+  }, []);
 
   return (
     <AppLayout>
@@ -55,7 +56,7 @@ function App() {
             onCancel={handleCancelButtonClick}
           />
         )}
-        {cardsArray.map((card) => (
+        {[...cardsArray].reverse().map((card) => (
           <Card
             faceValue={card.face}
             flipValue={card.back}
