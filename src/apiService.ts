@@ -68,7 +68,6 @@ export const uploadNewCard = async (card: CardObject): Promise<CardObject> => {
           face: (newCard as ImportedCardWrapper).flashcard.front,
           back: (newCard as ImportedCardWrapper).flashcard.back
         };
-        console.log(returnCard);        
         return returnCard;
       })
       .catch((e) => {
