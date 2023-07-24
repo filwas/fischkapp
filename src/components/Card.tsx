@@ -14,8 +14,8 @@ interface CardProps {
   /**text height */
   textHeight?: number;
   /**identificator */
-  id: number;
-  onDelete: (id: number) => void;
+  id: string;
+  onDelete: (id: string) => void;
 }
 
 export const Card = (props: CardProps) => {
@@ -34,7 +34,6 @@ export const Card = (props: CardProps) => {
 
   const [playAnimation, setPlayAnimation] = useState(false);
 
-
   useEffect(() => {
     setInputDisplayValue(flipState ? faceValue : flipValue);
   }, [flipState, faceValue, flipValue]);
@@ -50,7 +49,9 @@ export const Card = (props: CardProps) => {
   const initialTextHeight =
     20 +
     countTextLines(
-      props.faceValue.length > props.flipValue.length ? props.faceValue : props.flipValue
+      props.faceValue.length > props.flipValue.length
+        ? props.faceValue
+        : props.flipValue
     ) *
       19;
   const [maxTextHeight, setMaxTextHeight] = useState(initialTextHeight);
@@ -63,7 +64,6 @@ export const Card = (props: CardProps) => {
     setTimeout(() => {
       setPlayAnimation(false);
     }, 400);
-
   }
 
   function handleEditButtonClick(event?: React.MouseEvent) {
@@ -87,28 +87,28 @@ export const Card = (props: CardProps) => {
 
   const handleTextInputOnChange = function (event: React.ChangeEvent) {
     const target = event.target as HTMLTextAreaElement;
-    setInputDisplayValue(target.value.trim());
+    setInputDisplayValue(target.value);
   };
 
   const dynamicClasses = [
     styles.card,
     playAnimation ? styles.flipVerticalRight : "",
-  ].join(" ")
+  ].join(" ");
 
   const handleDeleteButtonClick = (event?: React.MouseEvent) => {
-    props.onDelete(props.id)
-    //somehow deleting a card enabled edit mode on the next 
+    props.onDelete(props.id);
+    //somehow deleting a card enabled edit mode on the next
     //card, and using the setter here stops this behaviour
     //should this be moved into a useEffect or something?
     setEditEnabled(!editEnabled);
     if (event) event.stopPropagation();
-  }
+  };
 
   useEffect(() => {
-    let linesAmount = countTextLines(inputDisplayValue)
-    let calculatedHeight = 20 + (linesAmount * 19);
-    if (calculatedHeight > maxTextHeight) setMaxTextHeight(calculatedHeight)
-  }, [inputDisplayValue])
+    let linesAmount = countTextLines(inputDisplayValue);
+    let calculatedHeight = 20 + linesAmount * 19;
+    if (calculatedHeight > maxTextHeight) setMaxTextHeight(calculatedHeight);
+  }, [inputDisplayValue]);
 
   if (editEnabled) {
     return (

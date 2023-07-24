@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./SmallIconButton.module.css";
-import editIcon from "../../public/editIcon.svg";
-import deleteIcon from "../../public/deleteIcon.svg";
+import editIcon from "../assets/editIcon.svg";
+import deleteIcon from "../assets/deleteIcon.svg";
 
 interface ButtonProps {
   type: "edit" | "delete";
