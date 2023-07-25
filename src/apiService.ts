@@ -83,6 +83,7 @@ export const patchCard = async (card: CardObject): Promise<void> => {
   }
 };
 
+//adding comment so that anything changes
 export const deleteCard = async (id: string): Promise<void> => {
   try {
     const options: RequestInit = {
