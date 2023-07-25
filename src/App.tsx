@@ -6,7 +6,7 @@ import { Card } from "./components/Card";
 import { useEffect, useState } from "react";
 import { NewCard } from "./components/NewCard";
 import React from "react";
-import { uploadNewCard, fetchCards, patchCard } from "./apiService";
+import { uploadNewCard, fetchCards, patchCard, deleteCard } from "./apiService";
 import { CardObject } from "./types/types";
 
 function App() {
@@ -28,6 +28,7 @@ function App() {
   };
 
   const handleDeleteButtonClick = (id: string) => {
+    deleteCard(id)
     const newCardsArray = cardsArray.filter((card) => card.id != id);
     setCardsArray(newCardsArray);
   };
