@@ -94,7 +94,7 @@ export const patchCard = async (card: CardObject): Promise<void> => {
       }),
     };
 
-    await customFetch(card.id, options);
+    await customFetch("/flashcards/"+card.id, options);
   } catch (error) {
     throw error;
   }
@@ -110,7 +110,7 @@ export const deleteCard = async (id: string): Promise<void> => {
       },
     };
 
-    await customFetch(id, options);
+    await customFetch("/flashcards/"+id, options);
   } catch (error) {
     throw error;
   }
