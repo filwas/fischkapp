@@ -99,3 +99,18 @@ export const patchCard = async (card: CardObject): Promise<void> => {
     throw error;
   }
 };
+
+export const deleteCard = async (id: string): Promise<void> => {
+  try {
+    const options: RequestInit = {
+      method: "DELETE",
+      headers: {
+        Authorization: "secret_token",
+      },
+    };
+
+    await customFetch("/flashcards/"+id, options);
+  } catch (error) {
+    throw error;
+  }
+};
