@@ -18,6 +18,10 @@ export const customFetch = async <T>(
   }
 };
 
+interface ImportedCardWrapper {
+  flashcard: ImportedCardObject
+}
+
 interface ImportedCardObject {
   front: string;
   back: string;
@@ -36,6 +40,40 @@ export const fetchCards = async (): Promise<CardObject[]> => {
     }));
 
     return importedCardsArray;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const uploadNewCard = async (card: CardObject): Promise<CardObject> => {
+  try {
+    const options: RequestInit = {
+      method: "POST",
+      headers: {
+        Authorization: "secret_token",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        front: card.face,
+        back: card.back,
+      }),
+    };
+
+    //this fetch weirdly returns a different object than fetchCards method,
+    //therefore I've added a new interface called ImportedCardWrapper
+    return customFetch("/flashcards", options)
+      .then((newCard) => {
+        let returnCard: CardObject = {
+          id: (newCard as ImportedCardWrapper).flashcard._id,
+          face: (newCard as ImportedCardWrapper).flashcard.front,
+          back: (newCard as ImportedCardWrapper).flashcard.back
+        };
+        return returnCard;
+      })
+      .catch((e) => {
+        console.error(e);
+        throw e;
+      });
   } catch (error) {
     throw error;
   }

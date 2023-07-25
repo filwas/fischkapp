@@ -1,13 +1,12 @@
 import { AppHeader } from "./components/AppHeader";
 import { AppLayout } from "./components/AppLayout";
-import logo from "../public/FischLogo.svg";
-
+import logo from "./assets/fischLogo.svg";
 import styles from "./App.module.css";
 import { Card } from "./components/Card";
 import { useEffect, useState } from "react";
 import { NewCard } from "./components/NewCard";
 import React from "react";
-import { fetchCards } from "./apiService";
+import { fetchCards, uploadNewCard } from "./apiService";
 import { CardObject } from "./types/types";
 
 function App() {
@@ -18,14 +17,12 @@ function App() {
     setIsNewCardDisplayed(true);
   };
 
-  const handleSaveButtonClick = (card: CardObject) => {
-    setCardsArray([
-      { face: card.face, back: card.back, id: card.id },
-      ...cardsArray,
-    ]);
+  const handleSaveButtonClick = async (card: CardObject) => {
+    uploadNewCard(card).then((uploadedCard: CardObject) => {
+      setCardsArray([...cardsArray, uploadedCard])
+    });
     setIsNewCardDisplayed(false);
   };
-
   const handleCancelButtonClick = () => {
     setIsNewCardDisplayed(false);
   };
@@ -59,7 +56,7 @@ function App() {
             onCancel={handleCancelButtonClick}
           />
         )}
-        {cardsArray.map((card) => (
+        {[...cardsArray].reverse().map((card) => (
           <Card
             faceValue={card.face}
             flipValue={card.back}
