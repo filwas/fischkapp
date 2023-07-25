@@ -109,7 +109,7 @@ export const deleteCard = async (id: string): Promise<void> => {
       },
     };
 
-    await customFetch(id, options);
+    await customFetch("/flashcards/"+id, options);
   } catch (error) {
     throw error;
   }
