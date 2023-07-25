@@ -1,5 +1,5 @@
 export interface CardObject {
-    face: string;
-    back: string;
-    id: string;
-  }
+  face: string;
+  back: string;
+  id: string;
+}

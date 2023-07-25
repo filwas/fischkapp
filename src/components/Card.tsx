@@ -5,7 +5,6 @@ import { SmallIconButton } from "./SmallIconButton";
 import { TextOutput } from "./TextOutput";
 import { BigButton } from "./BigButton";
 import { countTextLines } from "./helperFunctions";
-import { CardObject } from "../types/types";
 
 interface CardProps {
   /**side A of the card*/
@@ -16,10 +15,7 @@ interface CardProps {
   textHeight?: number;
   /**identificator */
   id: string;
-  /**delete handler */
   onDelete: (id: string) => void;
-  /**patch handler */
-  onUpdate: (card: CardObject) => void;
 }
 
 export const Card = (props: CardProps) => {
@@ -38,7 +34,6 @@ export const Card = (props: CardProps) => {
 
   const [playAnimation, setPlayAnimation] = useState(false);
 
-
   useEffect(() => {
     setInputDisplayValue(flipState ? faceValue : flipValue);
   }, [flipState, faceValue, flipValue]);
@@ -54,7 +49,9 @@ export const Card = (props: CardProps) => {
   const initialTextHeight =
     20 +
     countTextLines(
-      props.faceValue.length > props.flipValue.length ? props.faceValue : props.flipValue
+      props.faceValue.length > props.flipValue.length
+        ? props.faceValue
+        : props.flipValue
     ) *
       19;
   const [maxTextHeight, setMaxTextHeight] = useState(initialTextHeight);
@@ -67,36 +64,25 @@ export const Card = (props: CardProps) => {
     setTimeout(() => {
       setPlayAnimation(false);
     }, 400);
-
   }
 
   function handleEditButtonClick(event?: React.MouseEvent) {
-    event && event.stopPropagation();
     setEditEnabled(!editEnabled);
+    event && event.stopPropagation();
   }
 
   const handleCancelButtonClick = () => {
     handleEditButtonClick();
   };
 
-  const handleSaveButtonClick = async (event?: React.MouseEvent) => {
-    if (event) event.stopPropagation();
+  const handleSaveButtonClick = (event?: React.MouseEvent) => {
     if (flipState) {
-      props.onUpdate({
-        id: props.id,
-        face: inputDisplayValue,
-        back: flipValue
-      })
       setFaceValue(inputDisplayValue);
     } else {
-      props.onUpdate({
-        id: props.id,
-        face: faceValue,
-        back: inputDisplayValue
-      })
       setFlipValue(inputDisplayValue);
     }
     handleEditButtonClick();
+    if (event) event.stopPropagation();
   };
 
   const handleTextInputOnChange = function (event: React.ChangeEvent) {
@@ -107,24 +93,22 @@ export const Card = (props: CardProps) => {
   const dynamicClasses = [
     styles.card,
     playAnimation ? styles.flipVerticalRight : "",
-  ].join(" ")
+  ].join(" ");
 
   const handleDeleteButtonClick = (event?: React.MouseEvent) => {
-    props.onDelete(props.id)
-    //somehow deleting a card enabled edit mode on the next 
+    props.onDelete(props.id);
+    //somehow deleting a card enabled edit mode on the next
     //card, and using the setter here stops this behaviour
     //should this be moved into a useEffect or something?
     setEditEnabled(!editEnabled);
     if (event) event.stopPropagation();
-  }
+  };
 
   useEffect(() => {
-    let linesAmount = countTextLines(inputDisplayValue)
-    let calculatedHeight = 20 + (linesAmount * 19);
-    if (calculatedHeight > maxTextHeight) setMaxTextHeight(calculatedHeight)
-  }, [inputDisplayValue])
-
-
+    let linesAmount = countTextLines(inputDisplayValue);
+    let calculatedHeight = 20 + linesAmount * 19;
+    if (calculatedHeight > maxTextHeight) setMaxTextHeight(calculatedHeight);
+  }, [inputDisplayValue]);
 
   if (editEnabled) {
     return (
