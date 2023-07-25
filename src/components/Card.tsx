@@ -5,6 +5,7 @@ import { SmallIconButton } from "./SmallIconButton";
 import { TextOutput } from "./TextOutput";
 import { BigButton } from "./BigButton";
 import { countTextLines } from "./helperFunctions";
+import { patchCard } from "../apiService";
 
 interface CardProps {
   /**side A of the card*/
@@ -77,8 +78,18 @@ export const Card = (props: CardProps) => {
 
   const handleSaveButtonClick = (event?: React.MouseEvent) => {
     if (flipState) {
+      patchCard({
+        id: props.id,
+        face: inputDisplayValue,
+        back: flipValue,
+      })
       setFaceValue(inputDisplayValue);
     } else {
+      patchCard({
+        id: props.id,
+        face: faceValue,
+        back: inputDisplayValue,
+      })
       setFlipValue(inputDisplayValue);
     }
     handleEditButtonClick();

@@ -19,7 +19,7 @@ export const customFetch = async <T>(
 };
 
 interface ImportedCardWrapper {
-  flashcard: ImportedCardObject
+  flashcard: ImportedCardObject;
 }
 
 interface ImportedCardObject {
@@ -66,7 +66,7 @@ export const uploadNewCard = async (card: CardObject): Promise<CardObject> => {
         let returnCard: CardObject = {
           id: (newCard as ImportedCardWrapper).flashcard._id,
           face: (newCard as ImportedCardWrapper).flashcard.front,
-          back: (newCard as ImportedCardWrapper).flashcard.back
+          back: (newCard as ImportedCardWrapper).flashcard.back,
         };
         return returnCard;
       })
@@ -74,6 +74,27 @@ export const uploadNewCard = async (card: CardObject): Promise<CardObject> => {
         console.error(e);
         throw e;
       });
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const patchCard = async (card: CardObject): Promise<void> => {
+  try {
+    const options: RequestInit = {
+      method: "PATCH",
+      headers: {
+        Authorization: "secret_token",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id: card.id,
+        front: card.face,
+        back: card.back,
+      }),
+    };
+
+    await customFetch(card.id, options);
   } catch (error) {
     throw error;
   }
