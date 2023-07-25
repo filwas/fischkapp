@@ -94,8 +94,25 @@ export const patchCard = async (card: CardObject): Promise<void> => {
       }),
     };
 
-    await customFetch(card.id, options);
+    await customFetch("/flashcards/"+card.id, options);
   } catch (error) {
     throw error;
   }
 };
+
+//adding comment so that anything changes
+export const deleteCard = async (id: string): Promise<void> => {
+  try {
+    const options: RequestInit = {
+      method: "DELETE",
+      headers: {
+        Authorization: "secret_token",
+      },
+    };
+
+    await customFetch("/flashcards/"+id, options);
+  } catch (error) {
+    throw error;
+  }
+};
+
