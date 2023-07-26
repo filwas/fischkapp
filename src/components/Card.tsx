@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styles from "./Card.module.css";
 import { TextInput } from "./TextInput";
 import { SmallIconButton } from "./SmallIconButton";

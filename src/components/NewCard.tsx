@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { RefObject, useEffect, useRef, useState } from "react";
 import styles from "./Card.module.css";
 import { TextInput } from "./TextInput";
 import { SmallIconButton } from "./SmallIconButton";
@@ -6,7 +6,6 @@ import { TextOutput } from "./TextOutput";
 import { BigButton } from "./BigButton";
 import { countTextLines } from "./helperFunctions";
 import { CardObject } from "../types/types";
-
 
 interface NewCardProps {
   onSave: (props: CardObject) => void;
@@ -33,9 +32,13 @@ export const NewCard = (props: NewCardProps) => {
 
   const [textHeight, setTextHeight] = useState(39);
 
+  const textInputRef = useRef<HTMLTextAreaElement>(null);
+
+
   const handleNextButtonClick = () => {
     setFaceValue(inputDisplayValue);
     setInputDisplayValue("");
+    textInputRef.current?.focus();
     setFlipState(!flipState);
   };
   const handleSaveButtonClick = () => {
@@ -60,10 +63,10 @@ export const NewCard = (props: NewCardProps) => {
   };
 
   useEffect(() => {
-    let linesAmount = countTextLines(inputDisplayValue)
-    let calculatedHeight = 20 + (linesAmount * 19);
-    setTextHeight(calculatedHeight)
-  }, [inputDisplayValue])
+    let linesAmount = countTextLines(inputDisplayValue);
+    let calculatedHeight = 20 + linesAmount * 19;
+    setTextHeight(calculatedHeight);
+  }, [inputDisplayValue]);
 
   return (
     <div className={styles.card} onClick={() => {}}>
@@ -73,14 +76,13 @@ export const NewCard = (props: NewCardProps) => {
         <SmallIconButton type={"delete"} onClick={handleDeleteButtonClick} />
       )}
       {!flipState && (
-        <TextOutput className={styles.caption}>
-          {faceValue}
-        </TextOutput>
+        <TextOutput className={styles.caption}>{faceValue}</TextOutput>
       )}
       <TextInput
         height={textHeight}
         value={inputDisplayValue}
         onChange={handleTextInputOnChange}
+        ref={textInputRef}
       />
       <div className={styles.buttonWrapper}>
         <BigButton

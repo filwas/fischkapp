@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from "react";
+import React, { LegacyRef, PropsWithChildren } from "react";
 import styles from "./TextInput.module.css";
 
 interface TextProps extends PropsWithChildren {
@@ -8,10 +8,11 @@ interface TextProps extends PropsWithChildren {
   height: number;
 }
 
-export const TextInput = (props: TextProps) => {
+export const TextInput = React.forwardRef((props: TextProps, ref: LegacyRef<HTMLTextAreaElement>) => {
   return (
     <textarea
       className={styles.input}
+      ref={ref}
       onChange={props.onChange}
       disabled={props.disabled}
       value={props.value}
@@ -19,4 +20,4 @@ export const TextInput = (props: TextProps) => {
       style={{height: props.height ? props.height + "px" : "" }}
     ></textarea>
   );
-};
+});
