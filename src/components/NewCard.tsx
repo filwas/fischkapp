@@ -30,8 +30,6 @@ export const NewCard = (props: NewCardProps) => {
     setInputDisplayValue(flipState ? faceValue : "");
   }, [flipState, faceValue]);
 
-  const [textHeight, setTextHeight] = useState(39);
-
   const textInputRef = useRef<HTMLTextAreaElement>(null);
 
 
@@ -64,12 +62,6 @@ export const NewCard = (props: NewCardProps) => {
     target.style.height = target.scrollHeight+"px";
   };
 
-  /*useEffect(() => {
-    let linesAmount = countTextLines(inputDisplayValue);
-    let calculatedHeight = 20 + linesAmount * 19;    
-    setTextHeight(calculatedHeight);
-  }, [inputDisplayValue]);*/
-
   return (
     <div className={styles.card} onClick={() => {}}>
       {flipState ? (
@@ -81,7 +73,6 @@ export const NewCard = (props: NewCardProps) => {
         <TextOutput className={styles.caption}>{faceValue}</TextOutput>
       )}
       <TextInput
-        //height={textHeight}
         value={inputDisplayValue}
         onChange={handleTextInputOnChange}
         ref={textInputRef}

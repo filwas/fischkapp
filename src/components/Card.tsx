@@ -122,18 +122,10 @@ export const Card = (props: CardProps) => {
 
   const handleDeleteButtonClick = (event?: React.MouseEvent) => {
     props.onDelete(props.id);
-    //somehow deleting a card enabled edit mode on the next
-    //card, and using the setter here stops this behaviour
-    //should this be moved into a useEffect or something?
     setEditEnabled(!editEnabled);
     if (event) event.stopPropagation();
   };
 
-  /*useEffect(() => {
-    let linesAmount = countTextLines(inputDisplayValue);
-    let calculatedHeight = 20 + linesAmount * 19;
-    if (calculatedHeight > maxTextHeight) setMaxTextHeight(calculatedHeight);
-  }, [inputDisplayValue]);*/
 
   if (editEnabled) {
     return (
