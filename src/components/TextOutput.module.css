@@ -1,11 +1,13 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;500&family=Lexend:wght@400;500;600&display=swap");
 
 .output{
+    max-width: 310px;
     display: block;
     margin: inherit;
     border: none;
     resize: none;
     overflow: hidden;
+    overflow-wrap: break-word;
     font-family: Lexend;
     font-weight: 500;
     font-size: 16px;

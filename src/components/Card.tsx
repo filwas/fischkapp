@@ -47,6 +47,8 @@ export const Card = (props: CardProps) => {
     setFlipValue(props.flipValue);
   }, [props.flipValue]);
 
+  const textInputRef = useRef<HTMLTextAreaElement>(null);
+
   const initialTextHeight =
     20 +
     countTextLines(
@@ -72,6 +74,12 @@ export const Card = (props: CardProps) => {
     event && event.stopPropagation();
   }
 
+  useEffect(() => {
+    if (textInputRef.current) {
+      handleTextInputOnChange({target: textInputRef.current} as unknown as React.ChangeEvent)
+    }
+  }, [editEnabled]);
+
   const handleCancelButtonClick = () => {
     handleEditButtonClick();
   };
@@ -82,14 +90,14 @@ export const Card = (props: CardProps) => {
         id: props.id,
         face: inputDisplayValue,
         back: flipValue,
-      })
+      });
       setFaceValue(inputDisplayValue);
     } else {
       patchCard({
         id: props.id,
         face: faceValue,
         back: inputDisplayValue,
-      })
+      });
       setFlipValue(inputDisplayValue);
     }
     handleEditButtonClick();
@@ -98,7 +106,13 @@ export const Card = (props: CardProps) => {
 
   const handleTextInputOnChange = function (event: React.ChangeEvent) {
     const target = event.target as HTMLTextAreaElement;
+    const scrollHeight = target.scrollHeight;
     setInputDisplayValue(target.value);
+    target.style.height = "0px";
+    target.style.height = scrollHeight + "px";
+    if (scrollHeight > maxTextHeight) {
+      setMaxTextHeight(scrollHeight)
+    }
   };
 
   const dynamicClasses = [
@@ -115,20 +129,20 @@ export const Card = (props: CardProps) => {
     if (event) event.stopPropagation();
   };
 
-  useEffect(() => {
+  /*useEffect(() => {
     let linesAmount = countTextLines(inputDisplayValue);
     let calculatedHeight = 20 + linesAmount * 19;
     if (calculatedHeight > maxTextHeight) setMaxTextHeight(calculatedHeight);
-  }, [inputDisplayValue]);
+  }, [inputDisplayValue]);*/
 
   if (editEnabled) {
     return (
       <div className={styles.card} onClick={() => {}}>
         <SmallIconButton type={"delete"} onClick={handleDeleteButtonClick} />
         <TextInput
-          height={maxTextHeight}
           value={inputDisplayValue}
           onChange={handleTextInputOnChange}
+          ref={textInputRef}
         />
         <div className={styles.buttonWrapper}>
           <BigButton colorToggle={false} onClick={handleCancelButtonClick}>

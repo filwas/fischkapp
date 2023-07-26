@@ -60,13 +60,15 @@ export const NewCard = (props: NewCardProps) => {
   const handleTextInputOnChange = function (event: React.ChangeEvent) {
     const target = event.target as HTMLTextAreaElement;
     setInputDisplayValue(target.value);
+    target.style.height = "0px"
+    target.style.height = target.scrollHeight+"px";
   };
 
-  useEffect(() => {
+  /*useEffect(() => {
     let linesAmount = countTextLines(inputDisplayValue);
-    let calculatedHeight = 20 + linesAmount * 19;
+    let calculatedHeight = 20 + linesAmount * 19;    
     setTextHeight(calculatedHeight);
-  }, [inputDisplayValue]);
+  }, [inputDisplayValue]);*/
 
   return (
     <div className={styles.card} onClick={() => {}}>
@@ -79,7 +81,7 @@ export const NewCard = (props: NewCardProps) => {
         <TextOutput className={styles.caption}>{faceValue}</TextOutput>
       )}
       <TextInput
-        height={textHeight}
+        //height={textHeight}
         value={inputDisplayValue}
         onChange={handleTextInputOnChange}
         ref={textInputRef}
